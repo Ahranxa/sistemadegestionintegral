@@ -1,7 +1,5 @@
 import { getDashboardData } from '$lib/dashboardData.js';
 import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
 
 function escapeCsv(value) {
 	const str = value == null ? '' : String(value);
@@ -107,90 +105,7 @@ export const GET = async ({ url }) => {
 		});
 	}
 
-	if (formato === 'pdf') {
-		const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
-
-		const periodo = data.filtros.usandoFiltroFecha
-			? `${formatDate(data.filtros.fechaInicio)} - ${formatDate(data.filtros.fechaFin)}`
-			: 'Mes actual';
-
-		doc.setFontSize(18);
-		doc.text('Reporte de Dashboard', 40, 50);
-
-		doc.setFontSize(11);
-		doc.setTextColor(100);
-		doc.text(`Periodo: ${periodo}`, 40, 75);
-
-		doc.setFontSize(12);
-		doc.setTextColor(0);
-		doc.text('KPIs', 40, 110);
-
-		const finalY1 = autoTable(doc, {
-			startY: 125,
-			head: [['KPI', 'Valor']],
-			body: [
-				['Facturado', formatMoney(data.totalFacturado)],
-				['Cobrado', formatMoney(data.totalCobrado)],
-				['Cartera pendiente', formatMoney(data.carteraPendiente)],
-				['Cotizaciones activas', String(data.cotsActivas)]
-			],
-			theme: 'striped',
-			headStyles: { fillColor: [79, 70, 229] }
-		}).finalY;
-
-		doc.text('Ingresos por mes', 40, finalY1 + 35);
-		const finalY2 = autoTable(doc, {
-			startY: finalY1 + 50,
-			head: [['Mes', 'Ingreso']],
-			body: data.ingresosPorMes.map((i) => [i.label, formatMoney(i.total)]),
-			theme: 'striped',
-			headStyles: { fillColor: [79, 70, 229] }
-		}).finalY;
-
-		doc.text('Cotizaciones por estado', 40, finalY2 + 35);
-		const finalY3 = autoTable(doc, {
-			startY: finalY2 + 50,
-			head: [['Estado', 'Cantidad']],
-			body: data.cotsPorEstado.map((e) => [e.estado, String(e._count.estado)]),
-			theme: 'striped',
-			headStyles: { fillColor: [79, 70, 229] }
-		}).finalY;
-
-		doc.text('Últimas cotizaciones', 40, finalY3 + 35);
-		const finalY4 = autoTable(doc, {
-			startY: finalY3 + 50,
-			head: [['Número', 'Cliente', 'Fecha', 'Total', 'Estado']],
-			body: data.ultimasCots.map((c) => [
-				c.numero,
-				c.cliente?.nombre || '-',
-				formatDate(c.fecha),
-				formatMoney(Number(c.total)),
-				c.estado
-			]),
-			theme: 'striped',
-			headStyles: { fillColor: [79, 70, 229] }
-		}).finalY;
-
-		doc.text('Top clientes con saldo pendiente', 40, finalY4 + 35);
-		autoTable(doc, {
-			startY: finalY4 + 50,
-			head: [['Cliente', 'Saldo pendiente']],
-			body: data.topClientes.map((c) => [c.nombre, formatMoney(c.pendiente)]),
-			theme: 'striped',
-			headStyles: { fillColor: [79, 70, 229] }
-		});
-
-		const pdf = doc.output('arraybuffer');
-
-		return new Response(new Uint8Array(pdf), {
-			headers: {
-				'Content-Type': 'application/pdf',
-				'Content-Disposition': 'attachment; filename="dashboard.pdf"'
-			}
-		});
-	}
-
-	return new Response(JSON.stringify({ error: 'Formato no soportado' }), {
+	return new Response(JSON.stringify({ error: 'Formato no soportado. Usa csv o xlsx' }), {
 		status: 400,
 		headers: { 'Content-Type': 'application/json' }
 	});

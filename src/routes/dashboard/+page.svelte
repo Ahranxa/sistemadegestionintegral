@@ -181,12 +181,6 @@
 		>
 			Excel
 		</a>
-		<a
-			href={`${baseExport}&formato=pdf`}
-			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
-		>
-			PDF
-		</a>
 	</div>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
