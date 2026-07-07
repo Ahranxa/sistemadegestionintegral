@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
 import { cotizacionSchema } from '$lib/validations/cotizacion.js';
 import { env } from '$env/dynamic/private';
+import { getUserInfo } from '$lib/userInfo.js';
 
 export const load = async () => {
 	const clientes = await prisma.cliente.findMany({
@@ -26,7 +27,8 @@ export const load = async () => {
 };
 
 export const actions = {
-	guardar: async ({ request, url }) => {
+	guardar: async ({ request, locals }) => {
+		const user = getUserInfo(locals);
 		const formData = await request.formData();
 		const raw = Object.fromEntries(formData);
 
@@ -70,7 +72,14 @@ export const actions = {
 						estado,
 						subtotal,
 						iva,
-						total
+						total,
+						...(user
+							? {
+									creadoPorId: user.id,
+									creadoPorEmail: user.email,
+									creadoPorNombre: user.nombre
+								}
+							: {})
 					}
 				});
 
@@ -91,7 +100,14 @@ export const actions = {
 				await tx.historialCot.create({
 					data: {
 						cotizacionId: creada.id,
-						estadoNuevo: estado
+						estadoNuevo: estado,
+						...(user
+							? {
+									creadoPorId: user.id,
+									creadoPorEmail: user.email,
+									creadoPorNombre: user.nombre
+								}
+							: {})
 					}
 				});
 

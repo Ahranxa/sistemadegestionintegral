@@ -1,10 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { createClerkClient } from '@clerk/backend';
 import { env } from '$env/dynamic/private';
-import { ROLES, isAdmin } from '$lib/roles.js';
+import { ROLES } from '$lib/roles.js';
 
 export const load = async ({ locals }) => {
-	if (!isAdmin(locals.user)) {
+	if (locals.userRole !== ROLES.ADMIN) {
 		throw redirect(303, '/dashboard');
 	}
 
@@ -30,7 +30,7 @@ export const load = async ({ locals }) => {
 
 export const actions = {
 	crear: async ({ request, locals }) => {
-		if (!isAdmin(locals.user)) {
+		if (locals.userRole !== ROLES.ADMIN) {
 			return fail(403, { error: 'No autorizado' });
 		}
 
@@ -69,7 +69,7 @@ export const actions = {
 	},
 
 	eliminar: async ({ request, locals }) => {
-		if (!isAdmin(locals.user)) {
+		if (locals.userRole !== ROLES.ADMIN) {
 			return fail(403, { error: 'No autorizado' });
 		}
 
@@ -90,7 +90,7 @@ export const actions = {
 	},
 
 	cambiarRol: async ({ request, locals }) => {
-		if (!isAdmin(locals.user)) {
+		if (locals.userRole !== ROLES.ADMIN) {
 			return fail(403, { error: 'No autorizado' });
 		}
 

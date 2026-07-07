@@ -71,6 +71,9 @@
 		<div>
 			<h1 class="text-2xl font-bold text-gray-800">{cot.numero}</h1>
 			<p class="text-gray-500">{cot.cliente.nombre}</p>
+			<p class="text-sm text-gray-400 mt-1">
+				Creado por {cot.creadoPorNombre || cot.creadoPorEmail || '—'} el {formatearFecha(cot.creadoEn)}
+			</p>
 		</div>
 		<a href="/cotizaciones" class="text-indigo-600 hover:underline">← Volver</a>
 	</div>
@@ -175,6 +178,7 @@
 						<th class="px-6 py-3">Fecha</th>
 						<th class="px-6 py-3">Método</th>
 						<th class="px-6 py-3">Referencia</th>
+						<th class="px-6 py-3">Registrado por</th>
 						<th class="px-6 py-3 text-right">Monto</th>
 						<th class="px-6 py-3"></th>
 					</tr>
@@ -185,6 +189,7 @@
 							<td class="px-6 py-4">{formatearFecha(pago.fecha)}</td>
 							<td class="px-6 py-4">{metodosPago[pago.metodo] || pago.metodo}</td>
 							<td class="px-6 py-4">{pago.referencia || '-'}</td>
+							<td class="px-6 py-4 text-sm">{pago.creadoPorNombre || pago.creadoPorEmail || '—'}</td>
 							<td class="px-6 py-4 text-right">{formatearMoneda(Number(pago.monto))}</td>
 							<td class="px-6 py-4 text-right">
 								{#if cot.estado !== 'PAGADA'}
@@ -220,6 +225,7 @@
 					<th class="px-6 py-3">Fecha</th>
 					<th class="px-6 py-3">Estado anterior</th>
 					<th class="px-6 py-3">Estado nuevo</th>
+					<th class="px-6 py-3">Usuario</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-100">
@@ -232,10 +238,11 @@
 								{estados[h.estadoNuevo].label}
 							</span>
 						</td>
+						<td class="px-6 py-4 text-sm">{h.creadoPorNombre || h.creadoPorEmail || '—'}</td>
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="3" class="px-6 py-8 text-center text-gray-500">Sin historial</td>
+						<td colspan="4" class="px-6 py-8 text-center text-gray-500">Sin historial</td>
 					</tr>
 				{/each}
 			</tbody>

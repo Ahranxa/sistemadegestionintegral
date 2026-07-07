@@ -73,6 +73,7 @@
 					<th class="px-6 py-3">Vencimiento</th>
 					<th class="px-6 py-3">Total</th>
 					<th class="px-6 py-3">Estado</th>
+					<th class="px-6 py-3">Creado por</th>
 					<th class="px-6 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
@@ -89,13 +90,14 @@
 								{estados[cot.estado].label}
 							</span>
 						</td>
+						<td class="px-6 py-4 text-gray-600 text-sm">{cot.creadoPorNombre}</td>
 						<td class="px-6 py-4 text-right">
 							<a href="/cotizaciones/{cot.id}" class="text-indigo-600 hover:underline">Ver</a>
 						</td>
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="7" class="px-6 py-8 text-center text-gray-500">
+						<td colspan="8" class="px-6 py-8 text-center text-gray-500">
 							No se encontraron cotizaciones.
 						</td>
 					</tr>

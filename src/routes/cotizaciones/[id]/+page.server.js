@@ -2,6 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
 import { serialize } from '$lib/serialize.js';
 import { env } from '$env/dynamic/private';
+import { getUserInfo } from '$lib/userInfo.js';
 
 const transicionesPermitidas = {
 	BORRADOR: ['ENVIADA'],
@@ -38,7 +39,8 @@ export const load = async ({ params }) => {
 };
 
 export const actions = {
-	cambiarEstado: async ({ request, params, url }) => {
+	cambiarEstado: async ({ request, params, locals }) => {
+		const user = getUserInfo(locals);
 		const formData = await request.formData();
 		const nuevoEstado = formData.get('nuevoEstado');
 
@@ -96,7 +98,14 @@ export const actions = {
 						cotizacionId: params.id,
 						estadoAnterior: cot.estado,
 						estadoNuevo: nuevoEstado,
-						nota: notaHistorial
+						nota: notaHistorial,
+						...(user
+							? {
+									creadoPorId: user.id,
+									creadoPorEmail: user.email,
+									creadoPorNombre: user.nombre
+								}
+							: {})
 					}
 				});
 			});
@@ -108,7 +117,8 @@ export const actions = {
 		}
 	},
 
-	registrarPago: async ({ request, params }) => {
+	registrarPago: async ({ request, params, locals }) => {
+		const user = getUserInfo(locals);
 		const formData = await request.formData();
 		const monto = parseFloat(formData.get('monto'));
 		const metodo = formData.get('metodo');
@@ -147,7 +157,14 @@ export const actions = {
 						monto,
 						metodo,
 						referencia: referencia || null,
-						fecha: new Date(fecha)
+						fecha: new Date(fecha),
+						...(user
+							? {
+									creadoPorId: user.id,
+									creadoPorEmail: user.email,
+									creadoPorNombre: user.nombre
+								}
+							: {})
 					}
 				});
 
@@ -162,7 +179,14 @@ export const actions = {
 						data: {
 							cotizacionId: params.id,
 							estadoAnterior: cot.estado,
-							estadoNuevo: 'PAGADA'
+							estadoNuevo: 'PAGADA',
+							...(user
+								? {
+										creadoPorId: user.id,
+										creadoPorEmail: user.email,
+										creadoPorNombre: user.nombre
+									}
+								: {})
 						}
 					});
 				}
