@@ -19,6 +19,7 @@ const roleHandler = async ({ event, resolve }) => {
 
 	event.locals.userRole = role;
 	event.locals.user = user ?? null;
+	console.error('[hooks] user:', user?.id, user?.primaryEmailAddress?.emailAddress, 'role:', role);
 	return resolve(event);
 };
 
