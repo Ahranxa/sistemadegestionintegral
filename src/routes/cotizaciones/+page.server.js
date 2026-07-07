@@ -1,4 +1,5 @@
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 
 export const load = async () => {
 	const cotizaciones = await prisma.cotizacion.findMany({
@@ -11,5 +12,5 @@ export const load = async () => {
 		orderBy: { nombre: 'asc' }
 	});
 
-	return { cotizaciones, clientes };
+	return serialize({ cotizaciones, clientes });
 };

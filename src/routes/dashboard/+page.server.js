@@ -1,4 +1,5 @@
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 
 export const load = async () => {
 	const ahora = new Date();
@@ -89,7 +90,7 @@ export const load = async () => {
 		.sort((a, b) => b.pendiente - a.pendiente)
 		.slice(0, 3);
 
-	return {
+	return serialize({
 		totalFacturado,
 		totalCobrado,
 		carteraPendiente,
@@ -98,5 +99,5 @@ export const load = async () => {
 		cotsPorEstado,
 		ultimasCots,
 		topClientes
-	};
+	});
 };

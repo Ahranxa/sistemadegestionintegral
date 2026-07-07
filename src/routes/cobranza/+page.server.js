@@ -1,5 +1,6 @@
 import { fail } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 import { env } from '$env/dynamic/private';
 
 export const load = async () => {
@@ -36,7 +37,7 @@ export const load = async () => {
 
 	const carteraPendiente = pendientes.reduce((sum, c) => sum + c.saldoPendiente, 0);
 
-	return { pendientes, carteraPendiente };
+	return serialize({ pendientes, carteraPendiente });
 };
 
 export const actions = {

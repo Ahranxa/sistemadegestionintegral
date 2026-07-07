@@ -1,5 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 import { env } from '$env/dynamic/private';
 
 const transicionesPermitidas = {
@@ -29,11 +30,11 @@ export const load = async ({ params }) => {
 	const totalPagado = cotizacion.pagos.reduce((sum, p) => sum + Number(p.monto), 0);
 	const saldoPendiente = Math.max(0, Number(cotizacion.total) - totalPagado);
 
-	return {
+	return serialize({
 		cotizacion,
 		totalPagado,
 		saldoPendiente
-	};
+	});
 };
 
 export const actions = {
