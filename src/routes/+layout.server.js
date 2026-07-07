@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { buildClerkProps } from 'svelte-clerk/server';
 
 export const load = async ({ locals, url }) => {
 	const isSignInPage = url.pathname.startsWith('/sign-in');
@@ -9,10 +10,11 @@ export const load = async ({ locals, url }) => {
 			throw redirect(303, '/sign-in');
 		}
 		return {
-			userId,
-			user: locals.auth()
+			...buildClerkProps(locals.auth())
 		};
 	}
 
-	return {};
+	return {
+		...buildClerkProps(locals.auth())
+	};
 };
