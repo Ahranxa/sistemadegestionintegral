@@ -29,6 +29,8 @@ export const load = async () => {
 export const actions = {
 	guardar: async ({ request, locals }) => {
 		const user = getUserInfo(locals);
+		console.log('[guardar cotizacion] locals.user:', locals.user);
+		console.log('[guardar cotizacion] user extraido:', user);
 		const formData = await request.formData();
 		const raw = Object.fromEntries(formData);
 
