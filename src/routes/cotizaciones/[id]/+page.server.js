@@ -155,5 +155,42 @@ export const actions = {
 			console.error(err);
 			return fail(500, { error: 'Error al registrar el pago' });
 		}
+	},
+
+	eliminarPago: async ({ request, params }) => {
+		const formData = await request.formData();
+		const pagoId = formData.get('pagoId');
+
+		try {
+			const cot = await prisma.cotizacion.findUnique({
+				where: { id: params.id },
+				include: { pagos: true }
+			});
+
+			if (!cot) {
+				return fail(404, { error: 'Cotización no encontrada' });
+			}
+
+			if (cot.estado === 'PAGADA') {
+				return fail(400, { error: 'No se pueden eliminar pagos de una cotización pagada' });
+			}
+
+			const pago = cot.pagos.find((p) => p.id === pagoId);
+			if (!pago) {
+				return fail(404, { error: 'Pago no encontrado' });
+			}
+
+			await prisma.pago.delete({ where: { id: pagoId } });
+
+			const nuevoTotalPagado = cot.pagos
+				.filter((p) => p.id !== pagoId)
+				.reduce((sum, p) => sum + Number(p.monto), 0);
+			const nuevoSaldo = Math.max(0, Number(cot.total) - nuevoTotalPagado);
+
+			return { success: true, saldoPendiente: nuevoSaldo };
+		} catch (err) {
+			console.error(err);
+			return fail(500, { error: 'Error al eliminar el pago' });
+		}
 	}
 };

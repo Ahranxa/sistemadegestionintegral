@@ -6,6 +6,8 @@
 
 	let cot = $derived(data.cotizacion);
 	let showPago = $state(false);
+	let showConfirmDelete = $state(false);
+	let pagoAEliminar = $state(null);
 
 	const estados = {
 		BORRADOR: { label: 'Borrador', clase: 'bg-gray-100 text-gray-700' },
@@ -45,6 +47,22 @@
 
 	function formatearHora(fecha) {
 		return fecha ? new Date(fecha).toLocaleString('es-MX') : '-';
+	}
+
+	function colorSaldo(saldo) {
+		if (saldo <= 0) return 'text-green-700';
+		if (saldo <= Number(cot.total) * 0.5) return 'text-yellow-700';
+		return 'text-red-700';
+	}
+
+	function abrirEliminar(pago) {
+		pagoAEliminar = pago;
+		showConfirmDelete = true;
+	}
+
+	function cerrarEliminar() {
+		pagoAEliminar = null;
+		showConfirmDelete = false;
 	}
 </script>
 
@@ -158,6 +176,7 @@
 						<th class="px-6 py-3">Método</th>
 						<th class="px-6 py-3">Referencia</th>
 						<th class="px-6 py-3 text-right">Monto</th>
+						<th class="px-6 py-3"></th>
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-100">
@@ -167,10 +186,29 @@
 							<td class="px-6 py-4">{metodosPago[pago.metodo] || pago.metodo}</td>
 							<td class="px-6 py-4">{pago.referencia || '-'}</td>
 							<td class="px-6 py-4 text-right">{formatearMoneda(Number(pago.monto))}</td>
+							<td class="px-6 py-4 text-right">
+								{#if cot.estado !== 'PAGADA'}
+									<button
+										type="button"
+										onclick={() => abrirEliminar(pago)}
+										class="text-red-600 hover:text-red-800 text-sm"
+									>
+										Eliminar
+									</button>
+								{/if}
+							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
+
+			<div class="border-t border-gray-100 p-6 text-right space-y-1">
+				<p class="text-sm text-gray-600">Total: {formatearMoneda(Number(cot.total))}</p>
+				<p class="text-sm text-gray-600">Pagado: {formatearMoneda(data.totalPagado)}</p>
+				<p class="text-lg font-bold {colorSaldo(data.saldoPendiente)}">
+					Pendiente: {formatearMoneda(data.saldoPendiente)}
+				</p>
+			</div>
 		</div>
 	{/if}
 
@@ -288,6 +326,46 @@
 						Guardar pago
 					</button>
 				</div>
+			</form>
+		</div>
+	</div>
+{/if}
+
+{#if showConfirmDelete && pagoAEliminar}
+	<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+		<div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
+			<h2 class="text-xl font-bold text-gray-800 mb-2">¿Eliminar pago?</h2>
+			<p class="text-gray-600 mb-6">
+				Se eliminará el pago de {formatearMoneda(Number(pagoAEliminar.monto))} realizado el {formatearFecha(pagoAEliminar.fecha)}.
+			</p>
+			<form
+				method="POST"
+				action="?/eliminarPago"
+				use:enhance={() => {
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							cerrarEliminar();
+							await invalidateAll();
+						}
+						update();
+					};
+				}}
+				class="flex justify-end gap-3"
+			>
+				<input type="hidden" name="pagoId" value={pagoAEliminar.id} />
+				<button
+					type="button"
+					onclick={cerrarEliminar}
+					class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
+				>
+					Cancelar
+				</button>
+				<button
+					type="submit"
+					class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+				>
+					Eliminar
+				</button>
 			</form>
 		</div>
 	</div>
