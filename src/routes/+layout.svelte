@@ -6,13 +6,16 @@
 	let { children, data } = $props();
 
 	let publishableKey = $derived(data.PUBLIC_CLERK_PUBLISHABLE_KEY);
+	let userRole = $derived(data.userRole);
+	let isAdmin = $derived(userRole === 'admin');
 
-	const navLinks = [
+	const navLinks = $derived([
 		{ href: '/dashboard', label: 'Dashboard', icon: '📊' },
 		{ href: '/clientes', label: 'Clientes', icon: '👥' },
 		{ href: '/cotizaciones', label: 'Cotizaciones', icon: '📄' },
-		{ href: '/cobranza', label: 'Cobranza', icon: '💰' }
-	];
+		{ href: '/cobranza', label: 'Cobranza', icon: '💰' },
+		...(isAdmin ? [{ href: '/admin/usuarios', label: 'Admin', icon: '⚙️' }] : [])
+	]);
 
 	let currentPath = $derived($page.url.pathname);
 	let isSignInPage = $derived(currentPath.startsWith('/sign-in'));
@@ -48,6 +51,9 @@
 
 					<div class="px-6 py-4 border-t border-indigo-700">
 						<p class="text-indigo-400 text-xs mb-3">v1.0 MVP</p>
+						{#if userRole}
+							<p class="text-indigo-300 text-xs uppercase tracking-wider">Rol: {userRole}</p>
+						{/if}
 					</div>
 				</aside>
 

@@ -12,12 +12,16 @@ export const load = async ({ locals, url }) => {
 		}
 		return {
 			PUBLIC_CLERK_PUBLISHABLE_KEY: env.PUBLIC_CLERK_PUBLISHABLE_KEY,
+			userRole: locals.userRole,
+			user: locals.user,
 			...buildClerkProps(locals.auth())
 		};
 	}
 
 	return {
 		PUBLIC_CLERK_PUBLISHABLE_KEY: env.PUBLIC_CLERK_PUBLISHABLE_KEY,
+		userRole: locals.userRole,
+		user: locals.user,
 		...buildClerkProps(locals.auth())
 	};
 };
