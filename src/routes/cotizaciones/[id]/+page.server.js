@@ -57,8 +57,8 @@ export const actions = {
 
 		let notaHistorial = null;
 
-		try {
-			if (nuevoEstado === 'ENVIADA' && cot.cliente && cot.cliente.correo) {
+		if (nuevoEstado === 'ENVIADA' && cot.cliente && cot.cliente.correo) {
+			try {
 				const { sendEmail } = await import('$lib/email.js');
 				const { templateCotizacionEnviada } = await import('$lib/emailTemplates.js');
 
@@ -76,9 +76,14 @@ export const actions = {
 
 				notaHistorial = ok
 					? `Correo enviado a ${cot.cliente.correo}`
-					: `Error al enviar correo: ${emailError?.message || emailError}`;
+					: `Error al enviar correo: ${emailError?.message || String(emailError)}`;
+			} catch (emailErr) {
+				console.error('[cambiarEstado] Error en envío de correo:', emailErr);
+				notaHistorial = `Error al enviar correo: ${emailErr.message}`;
 			}
+		}
 
+		try {
 			await prisma.$transaction(async (tx) => {
 				await tx.cotizacion.update({
 					where: { id: params.id },
