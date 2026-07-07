@@ -82,16 +82,86 @@
 		}
 	};
 
+	const etiquetaPeriodo = $derived(data.filtros.usandoFiltroFecha ? 'en el periodo' : 'este mes');
+
 	let kpis = $derived([
-		{ label: 'Facturado este mes', valor: formatearMoneda(data.totalFacturado), icono: '💵', color: 'bg-blue-100 text-blue-700' },
-		{ label: 'Cobrado este mes', valor: formatearMoneda(data.totalCobrado), icono: '💰', color: 'bg-green-100 text-green-700' },
+		{ label: `Facturado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalFacturado), icono: '💵', color: 'bg-blue-100 text-blue-700' },
+		{ label: `Cobrado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalCobrado), icono: '💰', color: 'bg-green-100 text-green-700' },
 		{ label: 'Cartera pendiente', valor: formatearMoneda(data.carteraPendiente), icono: '💳', color: 'bg-red-100 text-red-700' },
 		{ label: 'Cotizaciones activas', valor: data.cotsActivas.toString(), icono: '📋', color: 'bg-purple-100 text-purple-700' }
 	]);
+
+	const tituloGraficaIngresos = $derived(
+		data.filtros.usandoFiltroFecha ? 'Ingresos en el periodo' : 'Ingresos últimos 6 meses'
+	);
+	const tituloTopClientes = $derived(
+		data.filtros.clienteId ? 'Saldo pendiente del cliente' : 'Top 3 clientes con mayor saldo pendiente'
+	);
 </script>
 
 <div class="space-y-6">
-	<h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+		<h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+		{#if data.filtros.usandoFiltroFecha || data.filtros.clienteId}
+			<span class="text-sm text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full w-fit">
+				Mostrando datos filtrados
+			</span>
+		{/if}
+	</div>
+
+	<form method="GET" class="bg-white rounded-lg shadow p-4">
+		<div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+			<div>
+				<label for="clienteId" class="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
+				<select
+					id="clienteId"
+					name="clienteId"
+					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+				>
+					<option value="">Todos los clientes</option>
+					{#each data.clientes as cliente}
+						<option value={cliente.id} selected={cliente.id === data.filtros.clienteId}>
+							{cliente.nombre}
+						</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="fechaInicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha inicio</label>
+				<input
+					id="fechaInicio"
+					name="fechaInicio"
+					type="date"
+					value={data.filtros.fechaInicio || ''}
+					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+				/>
+			</div>
+			<div>
+				<label for="fechaFin" class="block text-sm font-medium text-gray-700 mb-1">Fecha fin</label>
+				<input
+					id="fechaFin"
+					name="fechaFin"
+					type="date"
+					value={data.filtros.fechaFin || ''}
+					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+				/>
+			</div>
+			<div class="flex gap-2">
+				<button
+					type="submit"
+					class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+				>
+					Aplicar filtros
+				</button>
+				<a
+					href="/dashboard"
+					class="flex-1 text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+				>
+					Limpiar
+				</a>
+			</div>
+		</div>
+	</form>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 		{#each kpis as kpi}
@@ -109,7 +179,7 @@
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 		<div class="bg-white rounded-lg shadow p-6">
-			<h2 class="text-lg font-semibold text-gray-800 mb-4">Ingresos últimos 6 meses</h2>
+			<h2 class="text-lg font-semibold text-gray-800 mb-4">{tituloGraficaIngresos}</h2>
 			<Bar data={barData} options={barOptions} />
 		</div>
 
@@ -151,7 +221,7 @@
 		</div>
 
 		<div class="bg-white rounded-lg shadow overflow-hidden">
-			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Top 3 clientes con mayor saldo pendiente</h2>
+			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">{tituloTopClientes}</h2>
 			<table class="w-full text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>

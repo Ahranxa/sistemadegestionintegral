@@ -1,57 +1,106 @@
 import { prisma } from '$lib/prisma.js';
 import { serialize } from '$lib/serialize.js';
 
-export const load = async () => {
+function inicioDelMes(fecha) {
+	return new Date(fecha.getFullYear(), fecha.getMonth(), 1);
+}
+
+function finDelMes(fecha) {
+	return new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0, 23, 59, 59, 999);
+}
+
+function formatearMes(fecha) {
+	return fecha.toLocaleDateString('es-MX', { month: 'short', year: '2-digit' });
+}
+
+export const load = async ({ url }) => {
+	const clienteId = url.searchParams.get('clienteId') || null;
+	const fechaInicioParam = url.searchParams.get('fechaInicio');
+	const fechaFinParam = url.searchParams.get('fechaFin');
+
 	const ahora = new Date();
-	const inicioMes = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+	const usandoFiltroFecha = fechaInicioParam && fechaFinParam;
 
-	const cotizacionesMes = await prisma.cotizacion.findMany({
-		where: {
-			estado: { not: 'BORRADOR' },
-			creadoEn: { gte: inicioMes }
-		}
-	});
-	const totalFacturado = cotizacionesMes.reduce((s, c) => s + Number(c.total), 0);
+	let fechaInicio;
+	let fechaFin;
 
-	const pagosMes = await prisma.pago.findMany({
-		where: { fecha: { gte: inicioMes } }
-	});
+	if (usandoFiltroFecha) {
+		fechaInicio = new Date(fechaInicioParam);
+		fechaFin = new Date(fechaFinParam);
+		fechaFin.setHours(23, 59, 59, 999);
+	} else {
+		fechaInicio = inicioDelMes(ahora);
+		fechaFin = finDelMes(ahora);
+	}
+
+	const whereRango = {
+		gte: fechaInicio,
+		lte: fechaFin
+	};
+
+	const whereCliente = clienteId ? { clienteId } : {};
+
+	const baseWhereCot = {
+		creadoEn: whereRango,
+		...whereCliente
+	};
+
+	const [cotizacionesMes, pagosMes] = await Promise.all([
+		prisma.cotizacion.findMany({
+			where: baseWhereCot,
+			include: { pagos: true }
+		}),
+		prisma.pago.findMany({
+			where: {
+				fecha: whereRango,
+				...(clienteId ? { cotizacion: { clienteId } } : {})
+			}
+		})
+	]);
+
+	const totalFacturado = cotizacionesMes
+		.filter((c) => c.estado === 'FACTURADA' || c.estado === 'PAGADA')
+		.reduce((s, c) => s + Number(c.total), 0);
+
 	const totalCobrado = pagosMes.reduce((s, p) => s + Number(p.monto), 0);
 
+	const cotsActivas = cotizacionesMes.filter((c) =>
+		['ENVIADA', 'APROBADA', 'FACTURADA'].includes(c.estado)
+	).length;
+
 	const cotsPendientes = await prisma.cotizacion.findMany({
-		where: { estado: { in: ['APROBADA', 'FACTURADA'] } },
-		include: { pagos: true }
+		where: {
+			estado: { in: ['APROBADA', 'FACTURADA'] },
+			...whereCliente
+		},
+		include: { pagos: true, cliente: true }
 	});
 	const carteraPendiente = cotsPendientes.reduce((s, c) => {
 		const pagado = c.pagos.reduce((sp, p) => sp + Number(p.monto), 0);
 		return s + (Number(c.total) - pagado);
 	}, 0);
 
-	const cotsActivas = await prisma.cotizacion.count({
-		where: { estado: { in: ['ENVIADA', 'APROBADA', 'FACTURADA'] } }
-	});
-
-	const hace6Meses = new Date(ahora.getFullYear(), ahora.getMonth() - 5, 1);
-	const pagos6Meses = await prisma.pago.findMany({
-		where: { fecha: { gte: hace6Meses } },
-		orderBy: { fecha: 'asc' }
-	});
+	const rangoMeses = Math.max(
+		(fechaFin.getFullYear() - fechaInicio.getFullYear()) * 12 +
+			(fechaFin.getMonth() - fechaInicio.getMonth()),
+		0
+	);
 
 	const meses = [];
-	for (let i = 5; i >= 0; i--) {
-		const d = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+	for (let i = 0; i <= rangoMeses; i++) {
+		const d = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth() + i, 1);
 		meses.push({
 			inicio: d,
-			label: d.toLocaleDateString('es-MX', { month: 'short', year: '2-digit' })
+			fin: finDelMes(d),
+			label: formatearMes(d)
 		});
 	}
 
 	const ingresosPorMes = meses.map((mes) => {
-		const fin = new Date(mes.inicio.getFullYear(), mes.inicio.getMonth() + 1, 1);
-		const total = pagos6Meses
+		const total = pagosMes
 			.filter((p) => {
 				const f = new Date(p.fecha);
-				return f >= mes.inicio && f < fin;
+				return f >= mes.inicio && f <= mes.fin;
 			})
 			.reduce((s, p) => s + Number(p.monto), 0);
 		return { label: mes.label, total };
@@ -59,17 +108,24 @@ export const load = async () => {
 
 	const cotsPorEstado = await prisma.cotizacion.groupBy({
 		by: ['estado'],
+		where: baseWhereCot,
 		_count: { estado: true }
 	});
 
 	const ultimasCots = await prisma.cotizacion.findMany({
+		where: baseWhereCot,
 		take: 5,
 		orderBy: { creadoEn: 'desc' },
 		include: { cliente: true }
 	});
 
-	const clientesConCots = await prisma.cliente.findMany({
+	const clientes = await prisma.cliente.findMany({
 		where: { activo: true },
+		orderBy: { nombre: 'asc' }
+	});
+
+	const clientesConCots = await prisma.cliente.findMany({
+		where: { activo: true, ...(clienteId ? { id: clienteId } : {}) },
 		include: {
 			cotizaciones: {
 				where: { estado: { in: ['APROBADA', 'FACTURADA'] } },
@@ -98,6 +154,13 @@ export const load = async () => {
 		ingresosPorMes,
 		cotsPorEstado,
 		ultimasCots,
-		topClientes
+		topClientes,
+		clientes,
+		filtros: {
+			clienteId,
+			fechaInicio: usandoFiltroFecha ? fechaInicio.toISOString().split('T')[0] : null,
+			fechaFin: usandoFiltroFecha ? fechaFin.toISOString().split('T')[0] : null,
+			usandoFiltroFecha
+		}
 	});
 };
