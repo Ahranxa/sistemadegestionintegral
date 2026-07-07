@@ -9,6 +9,7 @@ const clerkHandler = withClerkHandler({
 });
 
 const roleHandler = async ({ event, resolve }) => {
+	console.error('[hooks] Clerk keys present:', !!env.PUBLIC_CLERK_PUBLISHABLE_KEY, !!env.CLERK_SECRET_KEY);
 	const auth = event.locals.auth();
 	const user = auth?.user;
 	let role = getRole(user);
@@ -19,7 +20,7 @@ const roleHandler = async ({ event, resolve }) => {
 
 	event.locals.userRole = role;
 	event.locals.user = user ?? null;
-	console.error('[hooks] user:', user?.id, user?.primaryEmailAddress?.emailAddress, 'role:', role);
+	console.error('[hooks] auth object:', !!auth, 'user:', user?.id, 'role:', role);
 	return resolve(event);
 };
 
