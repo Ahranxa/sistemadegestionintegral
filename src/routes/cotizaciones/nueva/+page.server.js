@@ -104,14 +104,24 @@ export const actions = {
 				});
 
 				if (cliente && cliente.correo) {
-					const { enviarCotizacionEmail } = await import('$lib/email.js');
-					const publicUrl = env.PUBLIC_ORIGIN || `https://${url.host}`;
-					await enviarCotizacionEmail({
+					const conceptosCreados = await prisma.conceptoCot.findMany({
+						where: { cotizacionId: cotizacion.id },
+						orderBy: { orden: 'asc' }
+					});
+
+					const { sendEmail } = await import('$lib/email.js');
+					const { templateCotizacionEnviada } = await import('$lib/emailTemplates.js');
+
+					const html = templateCotizacionEnviada({
+						cliente,
+						cotizacion: { ...cotizacion, subtotal, iva, total, vencimiento },
+						conceptos: conceptosCreados
+					});
+
+					await sendEmail({
 						to: cliente.correo,
-						clienteNombre: cliente.nombre,
-						cotizacionNumero: raw.numero,
-						total,
-						url: `${publicUrl}/cotizaciones/${cotizacion.id}`
+						subject: `Cotización ${raw.numero} — ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(total)} MXN`,
+						html
 					});
 				}
 			}

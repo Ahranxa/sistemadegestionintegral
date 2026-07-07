@@ -43,7 +43,7 @@ export const actions = {
 
 		const cot = await prisma.cotizacion.findUnique({
 			where: { id: params.id },
-			include: { cliente: true }
+			include: { cliente: true, conceptos: { orderBy: { orden: 'asc' } } }
 		});
 
 		if (!cot) {
@@ -55,7 +55,30 @@ export const actions = {
 			return fail(400, { error: `No se puede cambiar de ${cot.estado} a ${nuevoEstado}` });
 		}
 
+		let notaHistorial = null;
+
 		try {
+			if (nuevoEstado === 'ENVIADA' && cot.cliente && cot.cliente.correo) {
+				const { sendEmail } = await import('$lib/email.js');
+				const { templateCotizacionEnviada } = await import('$lib/emailTemplates.js');
+
+				const html = templateCotizacionEnviada({
+					cliente: cot.cliente,
+					cotizacion: cot,
+					conceptos: cot.conceptos
+				});
+
+				const { ok, error: emailError } = await sendEmail({
+					to: cot.cliente.correo,
+					subject: `Cotización ${cot.numero} — ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(Number(cot.total))} MXN`,
+					html
+				});
+
+				notaHistorial = ok
+					? `Correo enviado a ${cot.cliente.correo}`
+					: `Error al enviar correo: ${emailError?.message || emailError}`;
+			}
+
 			await prisma.$transaction(async (tx) => {
 				await tx.cotizacion.update({
 					where: { id: params.id },
@@ -66,22 +89,11 @@ export const actions = {
 					data: {
 						cotizacionId: params.id,
 						estadoAnterior: cot.estado,
-						estadoNuevo: nuevoEstado
+						estadoNuevo: nuevoEstado,
+						nota: notaHistorial
 					}
 				});
 			});
-
-			if (nuevoEstado === 'ENVIADA' && cot.cliente && cot.cliente.correo) {
-				const { enviarCotizacionEmail } = await import('$lib/email.js');
-				const publicUrl = env.PUBLIC_ORIGIN || `https://${url.host}`;
-				await enviarCotizacionEmail({
-					to: cot.cliente.correo,
-					clienteNombre: cot.cliente.nombre,
-					cotizacionNumero: cot.numero,
-					total: Number(cot.total),
-					url: `${publicUrl}/cotizaciones/${cot.id}`
-				});
-			}
 
 			return { success: true };
 		} catch (err) {

@@ -40,7 +40,7 @@ export const load = async () => {
 };
 
 export const actions = {
-	enviarRecordatorio: async ({ request, url }) => {
+	enviarRecordatorio: async ({ request }) => {
 		const formData = await request.formData();
 		const cotizacionId = formData.get('cotizacionId');
 
@@ -57,33 +57,24 @@ export const actions = {
 			const totalPagado = cot.pagos.reduce((sum, p) => sum + Number(p.monto), 0);
 			const saldo = Number(cot.total) - totalPagado;
 
-			const resend = new (await import('resend')).Resend(process.env.RESEND_API_KEY);
-			const from = process.env.FROM_EMAIL;
+			const { sendEmail } = await import('$lib/email.js');
+			const { templateRecordatorioPago } = await import('$lib/emailTemplates.js');
 
-			if (!from || !process.env.RESEND_API_KEY) {
-				return fail(500, { error: 'Faltan credenciales de correo' });
-			}
+			const html = templateRecordatorioPago({
+				cliente: cot.cliente,
+				cotizacion: cot,
+				saldoPendiente: saldo
+			});
 
-			const publicUrl = env.PUBLIC_ORIGIN || `https://${url.host}`;
-
-			const html = `
-				<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-					<h2 style="color: #4f46e5;">Recordatorio de pago</h2>
-					<p>Hola ${cot.cliente.nombre},</p>
-					<p>Te recordamos que tienes un saldo pendiente por la cotización <strong>${cot.numero}</strong>.</p>
-					<p><strong>Total:</strong> ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(Number(cot.total))}</p>
-					<p><strong>Saldo pendiente:</strong> ${new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(saldo)}</p>
-					<a href="${publicUrl}/cotizaciones/${cot.id}" style="display: inline-block; background: #4f46e5; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 6px;">Ver cotización</a>
-					<p style="margin-top: 24px; color: #666; font-size: 12px;">Este correo fue generado automáticamente por GestorPyme.</p>
-				</div>
-			`;
-
-			await resend.emails.send({
-				from,
+			const { ok, error: emailError } = await sendEmail({
 				to: cot.cliente.correo,
 				subject: `Recordatorio de pago - ${cot.numero}`,
 				html
 			});
+
+			if (!ok) {
+				return fail(500, { error: `Error al enviar correo: ${emailError?.message || emailError}` });
+			}
 
 			return { success: true };
 		} catch (err) {
