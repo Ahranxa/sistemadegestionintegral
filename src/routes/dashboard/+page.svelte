@@ -97,6 +97,10 @@
 	const tituloTopClientes = $derived(
 		data.filtros.clienteId ? 'Saldo pendiente del cliente' : 'Top 3 clientes con mayor saldo pendiente'
 	);
+
+	const baseExport = $derived(
+		`/api/dashboard/exportar?clienteId=${data.filtros.clienteId || ''}&fechaInicio=${data.filtros.fechaInicio || ''}&fechaFin=${data.filtros.fechaFin || ''}`
+	);
 </script>
 
 <div class="space-y-6">
@@ -146,22 +150,44 @@
 					class="w-full border border-gray-300 rounded-lg px-3 py-2"
 				/>
 			</div>
-			<div class="flex gap-2">
+			<div class="flex flex-col gap-2">
 				<button
 					type="submit"
-					class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+					class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
 				>
 					Aplicar filtros
 				</button>
 				<a
 					href="/dashboard"
-					class="flex-1 text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+					class="w-full text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
 				>
 					Limpiar
 				</a>
 			</div>
 		</div>
 	</form>
+
+	<div class="flex flex-wrap items-center gap-3">
+		<span class="text-sm text-gray-600">Descargar reporte:</span>
+		<a
+			href={`${baseExport}&formato=csv`}
+			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+		>
+			CSV
+		</a>
+		<a
+			href={`${baseExport}&formato=xlsx`}
+			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+		>
+			Excel
+		</a>
+		<a
+			href={`${baseExport}&formato=pdf`}
+			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+		>
+			PDF
+		</a>
+	</div>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 		{#each kpis as kpi}
