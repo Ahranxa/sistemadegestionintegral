@@ -1,5 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 
 export const load = async ({ params }) => {
 	const cliente = await prisma.cliente.findUnique({
@@ -30,12 +31,12 @@ export const load = async ({ params }) => {
 
 	const totalPendiente = Math.max(0, totalFacturado - totalCobrado);
 
-	return {
+	return serialize({
 		cliente,
 		totalFacturado,
 		totalCobrado,
 		totalPendiente
-	};
+	});
 };
 
 export const actions = {
