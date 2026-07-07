@@ -29,7 +29,8 @@
     "@prisma/client": "^5.22.0",
     "prisma": "^5.22.0",
     "resend": "^3.0.0",
-    "svelte-clerk": "^0.18.7"
+    "svelte-clerk": "^0.18.7",
+    "zod": "^4.4.3"
   },
   "type": "module"
 }
