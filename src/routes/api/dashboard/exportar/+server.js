@@ -1,7 +1,7 @@
 import { getDashboardData } from '$lib/dashboardData.js';
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 function escapeCsv(value) {
 	const str = value == null ? '' : String(value);
@@ -125,7 +125,7 @@ export const GET = async ({ url }) => {
 		doc.setTextColor(0);
 		doc.text('KPIs', 40, 110);
 
-		doc.autoTable({
+		const finalY1 = autoTable(doc, {
 			startY: 125,
 			head: [['KPI', 'Valor']],
 			body: [
@@ -136,29 +136,29 @@ export const GET = async ({ url }) => {
 			],
 			theme: 'striped',
 			headStyles: { fillColor: [79, 70, 229] }
-		});
+		}).finalY;
 
-		doc.text('Ingresos por mes', 40, doc.lastAutoTable.finalY + 35);
-		doc.autoTable({
-			startY: doc.lastAutoTable.finalY + 50,
+		doc.text('Ingresos por mes', 40, finalY1 + 35);
+		const finalY2 = autoTable(doc, {
+			startY: finalY1 + 50,
 			head: [['Mes', 'Ingreso']],
 			body: data.ingresosPorMes.map((i) => [i.label, formatMoney(i.total)]),
 			theme: 'striped',
 			headStyles: { fillColor: [79, 70, 229] }
-		});
+		}).finalY;
 
-		doc.text('Cotizaciones por estado', 40, doc.lastAutoTable.finalY + 35);
-		doc.autoTable({
-			startY: doc.lastAutoTable.finalY + 50,
+		doc.text('Cotizaciones por estado', 40, finalY2 + 35);
+		const finalY3 = autoTable(doc, {
+			startY: finalY2 + 50,
 			head: [['Estado', 'Cantidad']],
 			body: data.cotsPorEstado.map((e) => [e.estado, String(e._count.estado)]),
 			theme: 'striped',
 			headStyles: { fillColor: [79, 70, 229] }
-		});
+		}).finalY;
 
-		doc.text('Últimas cotizaciones', 40, doc.lastAutoTable.finalY + 35);
-		doc.autoTable({
-			startY: doc.lastAutoTable.finalY + 50,
+		doc.text('Últimas cotizaciones', 40, finalY3 + 35);
+		const finalY4 = autoTable(doc, {
+			startY: finalY3 + 50,
 			head: [['Número', 'Cliente', 'Fecha', 'Total', 'Estado']],
 			body: data.ultimasCots.map((c) => [
 				c.numero,
@@ -169,11 +169,11 @@ export const GET = async ({ url }) => {
 			]),
 			theme: 'striped',
 			headStyles: { fillColor: [79, 70, 229] }
-		});
+		}).finalY;
 
-		doc.text('Top clientes con saldo pendiente', 40, doc.lastAutoTable.finalY + 35);
-		doc.autoTable({
-			startY: doc.lastAutoTable.finalY + 50,
+		doc.text('Top clientes con saldo pendiente', 40, finalY4 + 35);
+		autoTable(doc, {
+			startY: finalY4 + 50,
 			head: [['Cliente', 'Saldo pendiente']],
 			body: data.topClientes.map((c) => [c.nombre, formatMoney(c.pendiente)]),
 			theme: 'striped',
