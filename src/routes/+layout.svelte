@@ -2,9 +2,10 @@
 	import '../app.css';
 	import { page } from '$app/stores';
 	import { ClerkProvider, SignedIn, SignedOut, UserButton } from 'svelte-clerk';
-	import { PUBLIC_CLERK_PUBLISHABLE_KEY } from '$env/static/public';
 
-	let { children } = $props();
+	let { children, data } = $props();
+
+	let publishableKey = $derived(data.PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 	const navLinks = [
 		{ href: '/dashboard', label: 'Dashboard', icon: '📊' },
@@ -17,7 +18,7 @@
 	let isSignInPage = $derived(currentPath.startsWith('/sign-in'));
 </script>
 
-<ClerkProvider publishableKey={PUBLIC_CLERK_PUBLISHABLE_KEY}>
+<ClerkProvider publishableKey={publishableKey}>
 	{#if isSignInPage}
 		{@render children()}
 	{:else}

@@ -10,11 +10,13 @@ export const load = async ({ locals, url }) => {
 			throw redirect(303, '/sign-in');
 		}
 		return {
+			PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.PUBLIC_CLERK_PUBLISHABLE_KEY,
 			...buildClerkProps(locals.auth())
 		};
 	}
 
 	return {
+		PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.PUBLIC_CLERK_PUBLISHABLE_KEY,
 		...buildClerkProps(locals.auth())
 	};
 };
