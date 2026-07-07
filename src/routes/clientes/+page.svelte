@@ -53,12 +53,22 @@
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-800">Clientes</h1>
-		<button
-			onclick={abrirCrear}
-			class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-		>
-			+ Nuevo cliente
-		</button>
+		<div class="flex items-center gap-3">
+			<form method="POST" action="?/exportarCorreos">
+				<button
+					type="submit"
+					class="bg-white text-indigo-700 border border-indigo-200 px-4 py-2 rounded-lg hover:bg-indigo-50 transition"
+				>
+					📥 Exportar correos (Resend)
+				</button>
+			</form>
+			<button
+				onclick={abrirCrear}
+				class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+			>
+				+ Nuevo cliente
+			</button>
+		</div>
 	</div>
 
 	{#if form?.success}
