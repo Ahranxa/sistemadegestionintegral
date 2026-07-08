@@ -82,7 +82,7 @@ model ImpuestoCot {
   cotizacionId  String
   cotizacion    Cotizacion @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
   nombre        String
-  tasa          Decimal    @db.Decimal(5, 4)
+  tasa          Decimal    @db.Decimal(5, 2)
   monto         Decimal    @db.Decimal(12, 2)
   orden         Int        @default(0)
 }
