@@ -14,7 +14,9 @@
 
 	let filtrados = $derived(
 		data.clientes.filter((c) => {
-			const q = busqueda.toLowerCase();
+			const q = busqueda.toLowerCase().trim();
+			if (q === 'inactivo') return !c.activo;
+			if (q === 'activo') return c.activo;
 			return (
 				c.nombre.toLowerCase().includes(q) ||
 				(c.empresa || '').toLowerCase().includes(q) ||
@@ -105,18 +107,24 @@
 					<th class="px-6 py-3">Correo</th>
 					<th class="px-6 py-3">Teléfono</th>
 					<th class="px-6 py-3">Alta</th>
+					<th class="px-6 py-3">Estado</th>
 					<th class="px-6 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-100">
 				{#each paginados as cliente}
-					<tr class="hover:bg-gray-50">
+					<tr class="hover:bg-gray-50 {!cliente.activo ? 'opacity-60' : ''}">
 						<td class="px-6 py-4 font-medium text-gray-800">{cliente.nombre}</td>
 						<td class="px-6 py-4 text-gray-600">{cliente.empresa || '-'}</td>
 						<td class="px-6 py-4 text-gray-600">{cliente.rfc || '-'}</td>
 						<td class="px-6 py-4 text-gray-600">{cliente.correo}</td>
 						<td class="px-6 py-4 text-gray-600">{cliente.telefono || '-'}</td>
 						<td class="px-6 py-4 text-gray-600">{formatearFecha(cliente.creadoEn)}</td>
+						<td class="px-6 py-4">
+							<span class="px-2 py-0.5 rounded-full text-xs font-medium {cliente.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+								{cliente.activo ? 'Activo' : 'Inactivo'}
+							</span>
+						</td>
 						<td class="px-6 py-4 text-right space-x-2">
 							<a
 								href="/clientes/{cliente.id}"
@@ -130,11 +138,33 @@
 							>
 								Editar
 							</button>
+							{#if !cliente.activo}
+								<form
+									method="POST"
+									action="?/eliminar"
+									class="inline"
+									use:enhance={() => {
+										return async ({ result, update }) => {
+											if (result.type === 'success') await invalidateAll();
+											update();
+										};
+									}}
+								>
+									<input type="hidden" name="id" value={cliente.id} />
+									<button
+										type="submit"
+										class="text-red-600 hover:underline"
+										onclick={(e) => { if (!confirm('¿Eliminar permanentemente a ' + cliente.nombre + '?')) e.preventDefault(); }}
+									>
+										Eliminar
+									</button>
+								</form>
+							{/if}
 						</td>
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="7" class="px-6 py-8 text-center text-gray-500">
+						<td colspan="8" class="px-6 py-8 text-center text-gray-500">
 							No se encontraron clientes.
 						</td>
 					</tr>

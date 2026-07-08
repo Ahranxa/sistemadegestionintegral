@@ -4,7 +4,6 @@ import { clienteSchema } from '$lib/validations/cliente.js';
 
 export const load = async () => {
 	const clientes = await prisma.cliente.findMany({
-		where: { activo: true },
 		orderBy: { creadoEn: 'desc' }
 	});
 
@@ -86,6 +85,22 @@ export const actions = {
 			return { success: true, message: 'Cliente desactivado exitosamente' };
 		} catch (err) {
 			return fail(500, { errors: { general: 'Error al desactivar el cliente' } });
+		}
+	},
+
+	eliminar: async ({ request }) => {
+		const formData = await request.formData();
+		const id = formData.get('id');
+
+		try {
+			const cliente = await prisma.cliente.findUnique({ where: { id } });
+			if (!cliente) return fail(404, { errors: { general: 'Cliente no encontrado' } });
+			if (cliente.activo) return fail(400, { errors: { general: 'Solo se pueden eliminar clientes inactivos' } });
+
+			await prisma.cliente.delete({ where: { id } });
+			return { success: true, message: 'Cliente eliminado exitosamente' };
+		} catch (err) {
+			return fail(500, { errors: { general: 'Error al eliminar el cliente' } });
 		}
 	}
 };
