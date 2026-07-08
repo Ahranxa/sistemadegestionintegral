@@ -38,13 +38,25 @@
 				href="/api/cotizaciones/exportar?formato=csv"
 				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
 			>
-				Descargar CSV
+				Descargar cotizaciones CSV
 			</a>
 			<a
 				href="/api/cotizaciones/exportar?formato=xlsx"
 				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
 			>
-				Descargar Excel
+				Descargar cotizaciones Excel
+			</a>
+			<a
+				href="/api/cotizaciones/historial/exportar?formato=csv"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar historial CSV
+			</a>
+			<a
+				href="/api/cotizaciones/historial/exportar?formato=xlsx"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar historial Excel
 			</a>
 			<a
 				href="/cotizaciones/nueva"
