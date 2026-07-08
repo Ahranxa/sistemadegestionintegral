@@ -33,12 +33,26 @@
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-800">Cotizaciones</h1>
-		<a
-			href="/cotizaciones/nueva"
-			class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-		>
-			+ Nueva cotización
-		</a>
+		<div class="flex items-center gap-3">
+			<a
+				href="/api/cotizaciones/exportar?formato=csv"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar CSV
+			</a>
+			<a
+				href="/api/cotizaciones/exportar?formato=xlsx"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar Excel
+			</a>
+			<a
+				href="/cotizaciones/nueva"
+				class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+			>
+				+ Nueva cotización
+			</a>
+		</div>
 	</div>
 
 	<div class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
