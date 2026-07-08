@@ -179,9 +179,7 @@
 							action="?/eliminarCotizacion"
 							use:enhance={() => {
 								return async ({ result, update }) => {
-									if (result.type === 'success') {
-										window.location.href = '/cotizaciones';
-									} else {
+									if (result.type === 'failure') {
 										update();
 									}
 								};
