@@ -22,7 +22,9 @@
 		TRANSFERENCIA: 'Transferencia',
 		EFECTIVO: 'Efectivo',
 		CHEQUE: 'Cheque',
-		TARJETA: 'Tarjeta'
+		TARJETA_DEBITO: 'Tarjeta de débito',
+		TARJETA_CREDITO: 'Tarjeta de crédito',
+		DEPOSITO: 'Depósito'
 	};
 
 	const transiciones = {
@@ -118,7 +120,9 @@
 
 			<div class="mt-4 text-right space-y-1">
 				<p class="text-sm text-gray-600">Subtotal: {formatearMoneda(Number(cot.subtotal))}</p>
-				<p class="text-sm text-gray-600">IVA (16%): {formatearMoneda(Number(cot.iva))}</p>
+				{#each cot.impuestos as imp}
+					<p class="text-sm text-gray-600">{imp.nombre}: {formatearMoneda(Number(imp.monto))}</p>
+				{/each}
 				<p class="text-xl font-bold text-gray-800">Total: {formatearMoneda(Number(cot.total))}</p>
 			</div>
 		</div>

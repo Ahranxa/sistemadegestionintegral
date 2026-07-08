@@ -35,10 +35,12 @@ export const actions = {
 		const raw = Object.fromEntries(formData);
 
 		let conceptos = [];
+		let impuestos = [];
 		try {
 			conceptos = JSON.parse(raw.conceptos || '[]');
+			impuestos = JSON.parse(raw.impuestos || '[]');
 		} catch {
-			return fail(400, { errors: { general: 'Conceptos inválidos' }, values: raw });
+			return fail(400, { errors: { general: 'Conceptos o impuestos inválidos' }, values: raw });
 		}
 
 		const payload = {
@@ -46,6 +48,8 @@ export const actions = {
 			fecha: raw.fecha,
 			vencimiento: raw.vencimiento || undefined,
 			conceptos,
+			impuestos,
+			aplicarIva: raw.aplicarIva === 'on' || raw.aplicarIva === 'true',
 			estado: raw.estado
 		};
 
@@ -57,11 +61,33 @@ export const actions = {
 			});
 		}
 
-		const { clienteId, fecha, vencimiento, conceptos: conceptosValidados, estado } = result.data;
+		const {
+			clienteId,
+			fecha,
+			vencimiento,
+			conceptos: conceptosValidados,
+			impuestos: impuestosValidados,
+			aplicarIva,
+			estado
+		} = result.data;
 
 		const subtotal = conceptosValidados.reduce((sum, c) => sum + c.cantidad * c.precioUnitario, 0);
-		const iva = subtotal * 0.16;
-		const total = subtotal + iva;
+
+		const impuestosFinales = impuestosValidados.map((imp) => ({
+			...imp,
+			monto: Number(imp.monto)
+		}));
+
+		if (aplicarIva) {
+			impuestosFinales.push({
+				nombre: 'IVA (16%)',
+				tasa: 0.16,
+				monto: Number((subtotal * 0.16).toFixed(2))
+			});
+		}
+
+		const totalImpuestos = impuestosFinales.reduce((sum, imp) => sum + imp.monto, 0);
+		const total = subtotal + totalImpuestos;
 
 		try {
 			const cotizacion = await prisma.$transaction(async (tx) => {
@@ -73,7 +99,6 @@ export const actions = {
 						vencimiento: vencimiento || null,
 						estado,
 						subtotal,
-						iva,
 						total,
 						...(user
 							? {
@@ -94,6 +119,19 @@ export const actions = {
 							cantidad: con.cantidad,
 							precioUnitario: con.precioUnitario,
 							subtotal: con.cantidad * con.precioUnitario,
+							orden: i
+						}
+					});
+				}
+
+				for (let i = 0; i < impuestosFinales.length; i++) {
+					const imp = impuestosFinales[i];
+					await tx.impuestoCot.create({
+						data: {
+							cotizacionId: creada.id,
+							nombre: imp.nombre,
+							tasa: imp.tasa,
+							monto: imp.monto,
 							orden: i
 						}
 					});
@@ -132,7 +170,7 @@ export const actions = {
 
 					const html = templateCotizacionEnviada({
 						cliente,
-						cotizacion: { ...cotizacion, subtotal, iva, total, vencimiento },
+						cotizacion: { ...cotizacion, subtotal, total, vencimiento, impuestos: impuestosFinales },
 						conceptos: conceptosCreados
 					});
 

@@ -4,6 +4,8 @@
 	let { data, form } = $props();
 
 	let conceptos = $state([{ descripcion: '', cantidad: 1, precioUnitario: 0 }]);
+	let impuestos = $state([]);
+	let aplicarIva = $state(false);
 
 	let clienteId = $state('');
 	let fecha = $state(new Date().toISOString().split('T')[0]);
@@ -12,8 +14,11 @@
 	let subtotal = $derived(
 		conceptos.reduce((sum, c) => sum + (Number(c.cantidad) || 0) * (Number(c.precioUnitario) || 0), 0)
 	);
-	let iva = $derived(subtotal * 0.16);
-	let total = $derived(subtotal + iva);
+	let ivaCalculado = $derived(aplicarIva ? subtotal * 0.16 : 0);
+	let totalImpuestos = $derived(
+		ivaCalculado + impuestos.reduce((sum, imp) => sum + (Number(imp.monto) || 0), 0)
+	);
+	let total = $derived(subtotal + totalImpuestos);
 
 	function agregarConcepto() {
 		conceptos = [...conceptos, { descripcion: '', cantidad: 1, precioUnitario: 0 }];
@@ -25,6 +30,18 @@
 
 	function actualizarConcepto(index, campo, valor) {
 		conceptos = conceptos.map((c, i) => (i === index ? { ...c, [campo]: valor } : c));
+	}
+
+	function agregarImpuesto() {
+		impuestos = [...impuestos, { nombre: '', tasa: 0, monto: 0 }];
+	}
+
+	function eliminarImpuesto(index) {
+		impuestos = impuestos.filter((_, i) => i !== index);
+	}
+
+	function actualizarImpuesto(index, campo, valor) {
+		impuestos = impuestos.map((imp, i) => (i === index ? { ...imp, [campo]: valor } : imp));
 	}
 
 	function formatearMoneda(valor) {
@@ -50,6 +67,7 @@
 	>
 		<input type="hidden" name="numero" value={data.numero} />
 		<input type="hidden" name="conceptos" value={JSON.stringify(conceptos)} />
+		<input type="hidden" name="impuestos" value={JSON.stringify(impuestos)} />
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			<div>
@@ -182,10 +200,95 @@
 			</button>
 		</div>
 
+		<div>
+			<h2 class="text-lg font-semibold text-gray-800 mb-3">Impuestos</h2>
+			<div class="flex items-center gap-3 mb-4">
+				<input
+					id="aplicarIva"
+					type="checkbox"
+					name="aplicarIva"
+					bind:checked={aplicarIva}
+					class="w-4 h-4 text-indigo-600 border-gray-300 rounded"
+				/>
+				<label for="aplicarIva" class="text-sm text-gray-700">Aplicar IVA (16%)</label>
+			</div>
+
+			{#if impuestos.length > 0}
+				<div class="overflow-x-auto mb-4">
+					<table class="w-full text-sm">
+						<thead class="bg-gray-50 text-gray-600">
+							<tr>
+								<th class="px-3 py-2 text-left">Nombre</th>
+								<th class="px-3 py-2 text-left w-28">Tasa (%)</th>
+								<th class="px-3 py-2 text-left w-36">Monto</th>
+								<th class="px-3 py-2 w-16"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each impuestos as impuesto, i}
+								<tr>
+									<td class="px-3 py-2">
+										<input
+											type="text"
+											value={impuesto.nombre}
+											oninput={(e) => actualizarImpuesto(i, 'nombre', e.currentTarget.value)}
+											placeholder="Ej. IEPS, Retención"
+											class="w-full border border-gray-300 rounded-lg px-2 py-1"
+										/>
+									</td>
+									<td class="px-3 py-2">
+										<input
+											type="number"
+											min="0"
+											step="0.01"
+											value={impuesto.tasa}
+											oninput={(e) => actualizarImpuesto(i, 'tasa', e.currentTarget.value)}
+											class="w-full border border-gray-300 rounded-lg px-2 py-1"
+										/>
+									</td>
+									<td class="px-3 py-2">
+										<input
+											type="number"
+											min="0"
+											step="0.01"
+											value={impuesto.monto}
+											oninput={(e) => actualizarImpuesto(i, 'monto', e.currentTarget.value)}
+											class="w-full border border-gray-300 rounded-lg px-2 py-1"
+										/>
+									</td>
+									<td class="px-3 py-2 text-right">
+										<button
+											type="button"
+											onclick={() => eliminarImpuesto(i)}
+											class="text-red-600 hover:text-red-800"
+										>
+											×
+										</button>
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			{/if}
+			<button
+				type="button"
+				onclick={agregarImpuesto}
+				class="text-indigo-600 font-medium hover:underline"
+			>
+				+ Agregar otro impuesto
+			</button>
+		</div>
+
 		<div class="flex justify-end gap-4 pt-4 border-t border-gray-100">
-			<div class="text-right mr-auto">
+			<div class="text-right mr-auto space-y-1">
 				<p class="text-sm text-gray-600">Subtotal: {formatearMoneda(subtotal)}</p>
-				<p class="text-sm text-gray-600">IVA (16%): {formatearMoneda(iva)}</p>
+				{#if aplicarIva}
+					<p class="text-sm text-gray-600">IVA (16%): {formatearMoneda(ivaCalculado)}</p>
+				{/if}
+				{#each impuestos as impuesto}
+					<p class="text-sm text-gray-600">{impuesto.nombre || 'Impuesto'}: {formatearMoneda(Number(impuesto.monto) || 0)}</p>
+				{/each}
 				<p class="text-xl font-bold text-gray-800">Total: {formatearMoneda(total)}</p>
 			</div>
 		</div>

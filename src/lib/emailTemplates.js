@@ -2,6 +2,14 @@ export function templateCotizacionEnviada({ cliente, cotizacion, conceptos }) {
 	const formatMXN = (n) =>
 		new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(n);
 
+	const filasImpuestos = (cotizacion.impuestos || [])
+		.map(
+			(imp) => `
+			<p style="margin:4px 0;color:#6b7280;font-size:13px;">${imp.nombre}: ${formatMXN(Number(imp.monto))}</p>
+		`
+		)
+		.join('');
+
 	const filasConceptos = conceptos
 		.map(
 			(c) => `
@@ -38,7 +46,7 @@ export function templateCotizacionEnviada({ cliente, cotizacion, conceptos }) {
 			</table>
 			<div style="text-align:right;margin-top:16px;padding:16px;background:#eef2ff;border-radius:6px;">
 				<p style="margin:4px 0;color:#6b7280;font-size:13px;">Subtotal: ${formatMXN(Number(cotizacion.subtotal))}</p>
-				<p style="margin:4px 0;color:#6b7280;font-size:13px;">IVA (16%): ${formatMXN(Number(cotizacion.iva))}</p>
+				${filasImpuestos}
 				<p style="margin:0;color:#4F46E5;font-size:20px;font-weight:bold;">Total: ${formatMXN(Number(cotizacion.total))}</p>
 			</div>
 			${cotizacion.vencimiento ? `<p style="color:#6b7280;font-size:13px;margin-top:16px;">Esta cotización tiene vigencia hasta el <strong>${new Date(cotizacion.vencimiento).toLocaleDateString('es-MX')}</strong>.</p>` : ''}

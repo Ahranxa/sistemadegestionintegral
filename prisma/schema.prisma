@@ -22,7 +22,9 @@ enum MetodoPago {
   TRANSFERENCIA
   EFECTIVO
   CHEQUE
-  TARJETA
+  TARJETA_DEBITO
+  TARJETA_CREDITO
+  DEPOSITO
 }
 
 model Cliente {
@@ -41,25 +43,25 @@ model Cliente {
 }
 
 model Cotizacion {
-  id              String        @id @default(cuid())
-  numero          String        @unique
+  id              String         @id @default(cuid())
+  numero          String         @unique
   clienteId       String
-  cliente         Cliente       @relation(fields: [clienteId], references: [id])
-  estado          EstadoCot     @default(BORRADOR)
-  fecha           DateTime      @default(now())
+  cliente         Cliente        @relation(fields: [clienteId], references: [id])
+  estado          EstadoCot      @default(BORRADOR)
+  fecha           DateTime       @default(now())
   vencimiento     DateTime?
-  subtotal        Decimal       @db.Decimal(12, 2)
-  iva             Decimal       @db.Decimal(12, 2)
-  total           Decimal       @db.Decimal(12, 2)
+  subtotal        Decimal        @db.Decimal(12, 2)
+  total           Decimal        @db.Decimal(12, 2)
   notas           String?
   conceptos       ConceptoCot[]
+  impuestos       ImpuestoCot[]
   pagos           Pago[]
   historial       HistorialCot[]
   creadoPorId     String?
   creadoPorEmail  String?
   creadoPorNombre String?
-  creadoEn        DateTime      @default(now())
-  actualizadoEn   DateTime      @updatedAt
+  creadoEn        DateTime       @default(now())
+  actualizadoEn   DateTime       @updatedAt
 }
 
 model ConceptoCot {
@@ -70,6 +72,16 @@ model ConceptoCot {
   cantidad      Decimal    @db.Decimal(10, 2)
   precioUnitario Decimal   @db.Decimal(12, 2)
   subtotal      Decimal    @db.Decimal(12, 2)
+  orden         Int        @default(0)
+}
+
+model ImpuestoCot {
+  id            String     @id @default(cuid())
+  cotizacionId  String
+  cotizacion    Cotizacion @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
+  nombre        String
+  tasa          Decimal    @db.Decimal(5, 4)
+  monto         Decimal    @db.Decimal(12, 2)
   orden         Int        @default(0)
 }
 

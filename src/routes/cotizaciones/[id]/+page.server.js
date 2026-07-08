@@ -19,6 +19,7 @@ export const load = async ({ params }) => {
 		include: {
 			cliente: true,
 			conceptos: { orderBy: { orden: 'asc' } },
+			impuestos: { orderBy: { orden: 'asc' } },
 			pagos: { orderBy: { fecha: 'desc' } },
 			historial: { orderBy: { creadoEn: 'desc' } }
 		}
