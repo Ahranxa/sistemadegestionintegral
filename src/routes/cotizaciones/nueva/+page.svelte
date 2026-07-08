@@ -41,7 +41,15 @@
 	}
 
 	function actualizarImpuesto(index, campo, valor) {
-		impuestos = impuestos.map((imp, i) => (i === index ? { ...imp, [campo]: valor } : imp));
+		impuestos = impuestos.map((imp, i) => {
+			if (i !== index) return imp;
+			const actualizado = { ...imp, [campo]: valor };
+			if (campo === 'tasa') {
+				const tasa = Number(valor) || 0;
+				actualizado.monto = +(subtotal * (tasa / 100)).toFixed(2);
+			}
+			return actualizado;
+		});
 	}
 
 	function formatearMoneda(valor) {
