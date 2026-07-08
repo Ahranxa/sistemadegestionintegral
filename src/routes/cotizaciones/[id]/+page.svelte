@@ -96,9 +96,9 @@
 	{/if}
 
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-		<div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+		<div class="bg-white rounded-lg shadow p-6 lg:col-span-2 overflow-x-auto">
 			<h2 class="text-lg font-semibold text-gray-800 mb-4">Conceptos</h2>
-			<table class="w-full text-sm">
+			<table class="w-full min-w-[400px] text-sm">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
 						<th class="px-4 py-2 text-left">Descripción</th>
