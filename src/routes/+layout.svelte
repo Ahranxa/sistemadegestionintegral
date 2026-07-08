@@ -65,8 +65,7 @@
 							</svg>
 							<div>
 								<h1 class="text-lg font-bold tracking-tight leading-none">PINTA</h1>
-								<p class="text-sm font-semibold leading-tight">Gestor PYME</p>
-								<p class="text-blue-300 text-xs mt-0.5">Sistema de Gestión</p>
+							<p class="text-blue-300 text-xs mt-0.5">Gestor PYME</p>
 							</div>
 						</div>
 						<button
