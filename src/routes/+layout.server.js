@@ -16,7 +16,7 @@ export const load = async ({ locals, url }) => {
 	return {
 		PUBLIC_CLERK_PUBLISHABLE_KEY: publicEnv.PUBLIC_CLERK_PUBLISHABLE_KEY,
 		userRole: locals.userRole,
-		user: clerkProps.user,
+		user: locals.user,
 		...clerkProps
 	};
 };

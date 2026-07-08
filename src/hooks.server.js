@@ -3,6 +3,7 @@ import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 import { sequence } from '@sveltejs/kit/hooks';
 import { getRole } from '$lib/roles.js';
+import { getUserFromClerkApi } from '$lib/userInfo.js';
 
 const clerkHandler = withClerkHandler({
 	publishableKey: publicEnv.PUBLIC_CLERK_PUBLISHABLE_KEY,
@@ -11,11 +12,15 @@ const clerkHandler = withClerkHandler({
 
 const roleHandler = async ({ event, resolve }) => {
 	const auth = event.locals.auth();
-	const clerkProps = buildClerkProps(auth);
-	const user = clerkProps.user;
+	let user = auth?.user;
+
+	if (!user && auth?.userId && privateEnv.CLERK_SECRET_KEY) {
+		user = await getUserFromClerkApi(auth.userId, privateEnv.CLERK_SECRET_KEY);
+	}
+
 	let role = getRole(user);
 
-	if (!role && user?.primaryEmailAddress?.emailAddress === 'aranxa.lopez@outlook.com') {
+	if (!role && user?.email === 'aranxa.lopez@outlook.com') {
 		role = 'admin';
 	}
 
