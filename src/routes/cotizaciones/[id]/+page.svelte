@@ -1,5 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { invalidateAll } from '$app/navigation';
 
 	let { data, form } = $props();
@@ -179,7 +180,9 @@
 							action="?/eliminarCotizacion"
 							use:enhance={() => {
 								return async ({ result, update }) => {
-									if (result.type === 'failure') {
+									if (result.type === 'success') {
+										await goto('/cotizaciones');
+									} else {
 										update();
 									}
 								};

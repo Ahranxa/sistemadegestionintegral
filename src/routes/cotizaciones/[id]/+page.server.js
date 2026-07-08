@@ -241,9 +241,8 @@ export const actions = {
 				await tx.cotizacion.delete({ where: { id: params.id } });
 			});
 
-			throw redirect(303, '/cotizaciones');
+			return { success: true };
 		} catch (err) {
-			if (err instanceof redirect) throw err;
 			console.error(err);
 			return fail(500, { error: 'Error al eliminar la cotización' });
 		}
