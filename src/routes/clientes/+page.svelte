@@ -51,31 +51,31 @@
 </script>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 		<h1 class="text-2xl font-bold text-gray-800">Clientes</h1>
-		<div class="flex items-center gap-3">
+		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/clientes/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar CSV
+				CSV
 			</a>
 			<a
 				href="/api/clientes/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar Excel
+				Excel
 			</a>
 			<a
 				href="/api/clientes/exportar-correos"
 				download
-				class="bg-white text-indigo-700 border border-indigo-200 px-4 py-2 rounded-lg hover:bg-indigo-50 transition"
+				class="bg-white text-indigo-700 border border-indigo-200 px-3 py-2 rounded-lg hover:bg-indigo-50 transition text-sm"
 			>
-				Exportar correos (Resend)
+				Exportar correos
 			</a>
 			<button
 				onclick={abrirCrear}
-				class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+				class="bg-indigo-600 text-white px-3 py-2 rounded-lg hover:bg-indigo-700 transition text-sm"
 			>
 				+ Nuevo cliente
 			</button>

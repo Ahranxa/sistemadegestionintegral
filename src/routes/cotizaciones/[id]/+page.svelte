@@ -206,8 +206,8 @@
 	</div>
 
 	{#if cot.pagos.length > 0}
-		<div class="bg-white rounded-lg shadow overflow-hidden">
-			<div class="flex items-center justify-between p-6 pb-0">
+		<div class="bg-white rounded-lg shadow overflow-x-auto">
+			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
 				<h2 class="text-lg font-semibold text-gray-800">Pagos registrados</h2>
 				<div class="flex items-center gap-2">
 					<a
@@ -224,7 +224,7 @@
 					</a>
 				</div>
 			</div>
-			<table class="w-full text-sm mt-4">
+			<table class="w-full min-w-[700px] text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
 						<th class="px-6 py-3">Fecha</th>
@@ -269,8 +269,8 @@
 		</div>
 	{/if}
 
-	<div class="bg-white rounded-lg shadow overflow-hidden">
-		<div class="flex items-center justify-between p-6 pb-0">
+	<div class="bg-white rounded-lg shadow overflow-x-auto">
+		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
 			<h2 class="text-lg font-semibold text-gray-800">Historial de estados</h2>
 			<div class="flex items-center gap-2">
 				<a
@@ -287,7 +287,7 @@
 				</a>
 			</div>
 		</div>
-		<table class="w-full text-sm mt-4">
+		<table class="w-full min-w-[500px] text-sm mt-4">
 			<thead class="bg-gray-50 text-gray-600">
 				<tr>
 					<th class="px-6 py-3">Fecha</th>

@@ -31,36 +31,36 @@
 </script>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 		<h1 class="text-2xl font-bold text-gray-800">Cotizaciones</h1>
-		<div class="flex items-center gap-3">
+		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/cotizaciones/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar cotizaciones CSV
+				Cotizaciones CSV
 			</a>
 			<a
 				href="/api/cotizaciones/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar cotizaciones Excel
+				Cotizaciones Excel
 			</a>
 			<a
 				href="/api/cotizaciones/historial/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar historial CSV
+				Historial CSV
 			</a>
 			<a
 				href="/api/cotizaciones/historial/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar historial Excel
+				Historial Excel
 			</a>
 			<a
 				href="/cotizaciones/nueva"
-				class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+				class="bg-indigo-600 text-white px-3 py-2 rounded-lg hover:bg-indigo-700 transition text-sm"
 			>
 				+ Nueva cotización
 			</a>
@@ -89,8 +89,8 @@
 		</select>
 	</div>
 
-	<div class="bg-white rounded-lg shadow overflow-hidden">
-		<table class="w-full text-left text-sm">
+	<div class="bg-white rounded-lg shadow overflow-x-auto">
+		<table class="w-full min-w-[800px] text-left text-sm">
 			<thead class="bg-gray-50 text-gray-600">
 				<tr>
 					<th class="px-6 py-3">Número</th>

@@ -55,8 +55,8 @@
 		<div class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-lg">{data.error}</div>
 	{/if}
 
-	<div class="bg-white rounded-lg shadow overflow-hidden">
-		<table class="w-full text-sm">
+	<div class="bg-white rounded-lg shadow overflow-x-auto">
+		<table class="w-full min-w-[700px] text-sm">
 			<thead class="bg-gray-50 text-gray-600">
 				<tr>
 					<th class="px-6 py-3 text-left">Usuario</th>

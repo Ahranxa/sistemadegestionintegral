@@ -20,36 +20,36 @@
 </script>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 		<h1 class="text-2xl font-bold text-gray-800">Cobranza</h1>
-		<div class="flex items-center gap-3">
+		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/cobranza/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar CSV
+				CSV
 			</a>
 			<a
 				href="/api/cobranza/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
-				Descargar Excel
+				Excel
 			</a>
 			<a
 				href="/api/cobranza/recordatorios/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
 				Recordatorios CSV
 			</a>
 			<a
 				href="/api/cobranza/recordatorios/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
 			>
 				Recordatorios Excel
 			</a>
-			<div class="bg-white rounded-lg shadow px-6 py-4">
-				<p class="text-sm text-gray-500">Cartera pendiente total</p>
-				<p class="text-2xl font-bold text-red-700">{formatearMoneda(data.carteraPendiente)}</p>
+			<div class="bg-white rounded-lg shadow px-4 py-3">
+				<p class="text-xs text-gray-500">Cartera pendiente total</p>
+				<p class="text-xl font-bold text-red-700">{formatearMoneda(data.carteraPendiente)}</p>
 			</div>
 		</div>
 	</div>
@@ -62,8 +62,8 @@
 		<div class="bg-green-100 text-green-800 px-4 py-3 rounded-lg">Recordatorio enviado correctamente</div>
 	{/if}
 
-	<div class="bg-white rounded-lg shadow overflow-hidden">
-		<table class="w-full text-left text-sm">
+	<div class="bg-white rounded-lg shadow overflow-x-auto">
+		<table class="w-full min-w-[900px] text-left text-sm">
 			<thead class="bg-gray-50 text-gray-600">
 				<tr>
 					<th class="px-6 py-3">Cliente</th>

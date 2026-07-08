@@ -219,8 +219,8 @@
 	</div>
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-		<div class="bg-white rounded-lg shadow overflow-hidden">
-			<div class="flex items-center justify-between p-6 pb-0">
+		<div class="bg-white rounded-lg shadow overflow-x-auto">
+			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
 				<h2 class="text-lg font-semibold text-gray-800">Ingresos por método de pago</h2>
 				<div class="flex items-center gap-2">
 					<a
@@ -237,7 +237,7 @@
 					</a>
 				</div>
 			</div>
-			<table class="w-full text-sm mt-4">
+			<table class="w-full min-w-[300px] text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
 						<th class="px-6 py-3">Método</th>
@@ -265,9 +265,9 @@
 			</table>
 		</div>
 
-		<div class="bg-white rounded-lg shadow overflow-hidden">
+		<div class="bg-white rounded-lg shadow overflow-x-auto">
 			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Últimas cotizaciones</h2>
-			<table class="w-full text-sm mt-4">
+			<table class="w-full min-w-[400px] text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
 						<th class="px-6 py-3">Número</th>
@@ -295,9 +295,9 @@
 			</table>
 		</div>
 
-		<div class="bg-white rounded-lg shadow overflow-hidden">
+		<div class="bg-white rounded-lg shadow overflow-x-auto">
 			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">{tituloTopClientes}</h2>
-			<table class="w-full text-sm mt-4">
+			<table class="w-full min-w-[300px] text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
 						<th class="px-6 py-3">Cliente</th>
