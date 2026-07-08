@@ -1,4 +1,4 @@
-import { withClerkHandler, buildClerkProps } from 'svelte-clerk/server';
+import { withClerkHandler } from 'svelte-clerk/server';
 import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -26,7 +26,6 @@ const roleHandler = async ({ event, resolve }) => {
 
 	event.locals.userRole = role;
 	event.locals.user = user ?? null;
-	console.error('[hooks] auth object:', !!auth, 'user:', user?.id, 'role:', role);
 	return resolve(event);
 };
 

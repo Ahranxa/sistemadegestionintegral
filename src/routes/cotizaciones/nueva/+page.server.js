@@ -29,8 +29,6 @@ export const load = async () => {
 export const actions = {
 	guardar: async ({ request, locals }) => {
 		const user = getUserInfo(locals);
-		console.error('[guardar cotizacion] locals.user:', JSON.stringify(locals.user));
-		console.error('[guardar cotizacion] user extraido:', JSON.stringify(user));
 		const formData = await request.formData();
 		const raw = Object.fromEntries(formData);
 

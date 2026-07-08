@@ -200,6 +200,47 @@ export const actions = {
 		}
 	},
 
+	eliminarCotizacion: async ({ params, locals }) => {
+		const user = getUserInfo(locals);
+
+		try {
+			const cot = await prisma.cotizacion.findUnique({
+				where: { id: params.id },
+				include: { pagos: true }
+			});
+
+			if (!cot) {
+				return fail(404, { error: 'Cotización no encontrada' });
+			}
+
+			const puedeEliminar =
+				locals.userRole === 'admin' ||
+				(user && cot.creadoPorId && cot.creadoPorId === user.id);
+
+			if (!puedeEliminar) {
+				return fail(403, { error: 'No tienes permiso para eliminar esta cotización' });
+			}
+
+			if (cot.pagos.length > 0) {
+				return fail(400, { error: 'No se puede eliminar una cotización con pagos registrados' });
+			}
+
+			if (!['BORRADOR', 'RECHAZADA'].includes(cot.estado)) {
+				return fail(400, {
+					error: `No se puede eliminar una cotización en estado ${cot.estado}`
+				});
+			}
+
+			await prisma.cotizacion.delete({ where: { id: params.id } });
+
+			throw redirect(303, '/cotizaciones');
+		} catch (err) {
+			if (err instanceof redirect) throw err;
+			console.error(err);
+			return fail(500, { error: 'Error al eliminar la cotización' });
+		}
+	},
+
 	eliminarPago: async ({ request, params }) => {
 		const formData = await request.formData();
 		const pagoId = formData.get('pagoId');

@@ -170,6 +170,38 @@
 					</button>
 				</div>
 			{/if}
+
+			{#if data.userRole === 'admin' || cot.creadoPorId === data.user?.id}
+				{#if cot.estado === 'BORRADOR' || cot.estado === 'RECHAZADA'}
+					<div class="bg-white rounded-lg shadow p-6">
+						<form
+							method="POST"
+							action="?/eliminarCotizacion"
+							use:enhance={() => {
+								return async ({ result, update }) => {
+									if (result.type === 'success') {
+										window.location.href = '/cotizaciones';
+									} else {
+										update();
+									}
+								};
+							}}
+							onsubmit={(e) => {
+								if (!confirm('¿Estás seguro de eliminar esta cotización? Esta acción no se puede deshacer.')) {
+									e.preventDefault();
+								}
+							}}
+						>
+							<button
+								type="submit"
+								class="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+							>
+								Eliminar cotización
+							</button>
+						</form>
+					</div>
+				{/if}
+			{/if}
 		</div>
 	</div>
 
