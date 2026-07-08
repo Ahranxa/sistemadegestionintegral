@@ -22,9 +22,23 @@
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-800">Cobranza</h1>
-		<div class="bg-white rounded-lg shadow px-6 py-4">
-			<p class="text-sm text-gray-500">Cartera pendiente total</p>
-			<p class="text-2xl font-bold text-red-700">{formatearMoneda(data.carteraPendiente)}</p>
+		<div class="flex items-center gap-3">
+			<a
+				href="/api/cobranza/exportar?formato=csv"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar CSV
+			</a>
+			<a
+				href="/api/cobranza/exportar?formato=xlsx"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Descargar Excel
+			</a>
+			<div class="bg-white rounded-lg shadow px-6 py-4">
+				<p class="text-sm text-gray-500">Cartera pendiente total</p>
+				<p class="text-2xl font-bold text-red-700">{formatearMoneda(data.carteraPendiente)}</p>
+			</div>
 		</div>
 	</div>
 

@@ -220,7 +220,23 @@
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 		<div class="bg-white rounded-lg shadow overflow-hidden">
-			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Ingresos por método de pago</h2>
+			<div class="flex items-center justify-between p-6 pb-0">
+				<h2 class="text-lg font-semibold text-gray-800">Ingresos por método de pago</h2>
+				<div class="flex items-center gap-2">
+					<a
+						href="/api/pagos/exportar?formato=csv"
+						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					>
+						CSV
+					</a>
+					<a
+						href="/api/pagos/exportar?formato=xlsx"
+						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					>
+						Excel
+					</a>
+				</div>
+			</div>
 			<table class="w-full text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>

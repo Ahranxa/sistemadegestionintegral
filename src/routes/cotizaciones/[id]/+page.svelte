@@ -175,7 +175,23 @@
 
 	{#if cot.pagos.length > 0}
 		<div class="bg-white rounded-lg shadow overflow-hidden">
-			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Pagos registrados</h2>
+			<div class="flex items-center justify-between p-6 pb-0">
+				<h2 class="text-lg font-semibold text-gray-800">Pagos registrados</h2>
+				<div class="flex items-center gap-2">
+					<a
+						href="/api/pagos/exportar?formato=csv&cotizacionId={cot.id}"
+						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					>
+						CSV
+					</a>
+					<a
+						href="/api/pagos/exportar?formato=xlsx&cotizacionId={cot.id}"
+						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					>
+						Excel
+					</a>
+				</div>
+			</div>
 			<table class="w-full text-sm mt-4">
 				<thead class="bg-gray-50 text-gray-600">
 					<tr>
