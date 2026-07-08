@@ -51,5 +51,18 @@ export const actions = {
 			if (err.status === 303) throw err;
 			return fail(500, { errors: { general: 'Error al desactivar el cliente' } });
 		}
+	},
+
+	activar: async ({ params }) => {
+		try {
+			await prisma.cliente.update({
+				where: { id: params.id },
+				data: { activo: true }
+			});
+			throw redirect(303, '/clientes');
+		} catch (err) {
+			if (err.status === 303) throw err;
+			return fail(500, { errors: { general: 'Error al activar el cliente' } });
+		}
 	}
 };

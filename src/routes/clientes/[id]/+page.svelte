@@ -74,23 +74,38 @@
 			</div>
 
 			<div class="mt-6 pt-6 border-t border-gray-100">
-				<form
-					method="POST"
-					action="?/desactivar"
-					use:enhance={() => {
-						return async ({ update }) => {
-							update();
-						};
-					}}
-				>
-					<button
-						type="submit"
-						onclick={confirmarDesactivacion}
-						class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+				{#if cliente.activo}
+					<form
+						method="POST"
+						action="?/desactivar"
+						use:enhance={() => {
+							return async ({ update }) => { update(); };
+						}}
 					>
-						Desactivar cliente
-					</button>
-				</form>
+						<button
+							type="submit"
+							onclick={confirmarDesactivacion}
+							class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+						>
+							Desactivar cliente
+						</button>
+					</form>
+				{:else}
+					<form
+						method="POST"
+						action="?/activar"
+						use:enhance={() => {
+							return async ({ update }) => { update(); };
+						}}
+					>
+						<button
+							type="submit"
+							class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+						>
+							Activar cliente
+						</button>
+					</form>
+				{/if}
 			</div>
 		</div>
 
