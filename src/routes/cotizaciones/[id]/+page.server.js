@@ -233,7 +233,13 @@ export const actions = {
 				});
 			}
 
-			await prisma.cotizacion.delete({ where: { id: params.id } });
+			await prisma.$transaction(async (tx) => {
+				await tx.historialCot.deleteMany({ where: { cotizacionId: params.id } });
+				await tx.logRecordatorio.deleteMany({ where: { cotizacionId: params.id } });
+				await tx.impuestoCot.deleteMany({ where: { cotizacionId: params.id } });
+				await tx.conceptoCot.deleteMany({ where: { cotizacionId: params.id } });
+				await tx.cotizacion.delete({ where: { id: params.id } });
+			});
 
 			throw redirect(303, '/cotizaciones');
 		} catch (err) {
