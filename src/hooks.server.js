@@ -1,4 +1,4 @@
-import { withClerkHandler } from 'svelte-clerk/server';
+import { withClerkHandler, buildClerkProps } from 'svelte-clerk/server';
 import { env as privateEnv } from '$env/dynamic/private';
 import { env as publicEnv } from '$env/dynamic/public';
 import { sequence } from '@sveltejs/kit/hooks';
@@ -10,13 +10,9 @@ const clerkHandler = withClerkHandler({
 });
 
 const roleHandler = async ({ event, resolve }) => {
-	console.error(
-		'[hooks] Clerk keys present:',
-		!!publicEnv.PUBLIC_CLERK_PUBLISHABLE_KEY,
-		!!privateEnv.CLERK_SECRET_KEY
-	);
 	const auth = event.locals.auth();
-	const user = auth?.user;
+	const clerkProps = buildClerkProps(auth);
+	const user = clerkProps.user;
 	let role = getRole(user);
 
 	if (!role && user?.primaryEmailAddress?.emailAddress === 'aranxa.lopez@outlook.com') {
