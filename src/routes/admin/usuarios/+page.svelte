@@ -20,13 +20,27 @@
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<h1 class="text-2xl font-bold text-gray-800">Administración de usuarios</h1>
-		<button
-			type="button"
-			onclick={() => (showModal = true)}
-			class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-		>
-			+ Nuevo usuario
-		</button>
+		<div class="flex items-center gap-3">
+			<a
+				href="/api/auditoria/exportar?formato=csv"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Auditoría CSV
+			</a>
+			<a
+				href="/api/auditoria/exportar?formato=xlsx"
+				class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+			>
+				Auditoría Excel
+			</a>
+			<button
+				type="button"
+				onclick={() => (showModal = true)}
+				class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+			>
+				+ Nuevo usuario
+			</button>
+		</div>
 	</div>
 
 	{#if form?.error}

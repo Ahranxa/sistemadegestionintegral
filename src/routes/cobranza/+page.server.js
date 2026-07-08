@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
 import { serialize } from '$lib/serialize.js';
 import { env } from '$env/dynamic/private';
+import { getUserInfo } from '$lib/userInfo.js';
 
 export const load = async () => {
 	const cotizaciones = await prisma.cotizacion.findMany({
@@ -41,7 +42,8 @@ export const load = async () => {
 };
 
 export const actions = {
-	enviarRecordatorio: async ({ request }) => {
+	enviarRecordatorio: async ({ request, locals }) => {
+		const user = getUserInfo(locals);
 		const formData = await request.formData();
 		const cotizacionId = formData.get('cotizacionId');
 
@@ -71,6 +73,24 @@ export const actions = {
 				to: cot.cliente.correo,
 				subject: `Recordatorio de pago - ${cot.numero}`,
 				html
+			});
+
+			await prisma.logRecordatorio.create({
+				data: {
+					cotizacionId: cot.id,
+					clienteId: cot.cliente.id,
+					clienteEmail: cot.cliente.correo,
+					saldoPendiente: saldo,
+					exitoso: ok,
+					error: emailError ? String(emailError?.message || emailError) : null,
+					...(user
+						? {
+								enviadoPorId: user.id,
+								enviadoPorEmail: user.email,
+								enviadoPorNombre: user.nombre
+							}
+						: {})
+				}
 			});
 
 			if (!ok) {
