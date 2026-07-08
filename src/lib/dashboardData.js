@@ -146,12 +146,25 @@ export async function getDashboardData({ clienteId = null, fechaInicioParam = nu
 		.sort((a, b) => b.pendiente - a.pendiente)
 		.slice(0, 3);
 
+	const ingresosPorMetodo = pagosMes.reduce((acc, p) => {
+		const metodo = p.metodo || 'SIN_METODO';
+		const actual = acc.find((x) => x.metodo === metodo);
+		if (actual) {
+			actual.monto += Number(p.monto);
+			actual.cantidad += 1;
+		} else {
+			acc.push({ metodo, monto: Number(p.monto), cantidad: 1 });
+		}
+		return acc;
+	}, []);
+
 	return {
 		totalFacturado,
 		totalCobrado,
 		carteraPendiente,
 		cotsActivas,
 		ingresosPorMes,
+		ingresosPorMetodo,
 		cotsPorEstado,
 		ultimasCots,
 		topClientes,

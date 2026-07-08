@@ -33,6 +33,15 @@
 		PAGADA: '#14B8A6'
 	};
 
+	const metodosPago = {
+		TRANSFERENCIA: 'Transferencia',
+		EFECTIVO: 'Efectivo',
+		CHEQUE: 'Cheque',
+		TARJETA_DEBITO: 'Tarjeta de débito',
+		TARJETA_CREDITO: 'Tarjeta de crédito',
+		DEPOSITO: 'Depósito'
+	};
+
 	function formatearMoneda(valor) {
 		return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(valor);
 	}
@@ -210,6 +219,36 @@
 	</div>
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+		<div class="bg-white rounded-lg shadow overflow-hidden">
+			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Ingresos por método de pago</h2>
+			<table class="w-full text-sm mt-4">
+				<thead class="bg-gray-50 text-gray-600">
+					<tr>
+						<th class="px-6 py-3">Método</th>
+						<th class="px-6 py-3 text-center">Pagos</th>
+						<th class="px-6 py-3 text-right">Monto</th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-gray-100">
+					{#each data.ingresosPorMetodo as item}
+						<tr class="hover:bg-gray-50">
+							<td class="px-6 py-4 font-medium text-gray-800">
+								{metodosPago[item.metodo] || item.metodo}
+							</td>
+							<td class="px-6 py-4 text-center text-gray-600">{item.cantidad}</td>
+							<td class="px-6 py-4 text-right font-bold text-green-700">
+								{formatearMoneda(item.monto)}
+							</td>
+						</tr>
+					{:else}
+						<tr>
+							<td colspan="3" class="px-6 py-8 text-center text-gray-500">Sin pagos en el periodo</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+
 		<div class="bg-white rounded-lg shadow overflow-hidden">
 			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Últimas cotizaciones</h2>
 			<table class="w-full text-sm mt-4">

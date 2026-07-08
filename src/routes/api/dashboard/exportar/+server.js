@@ -39,6 +39,9 @@ export const GET = async ({ url }) => {
 			['Estado', 'Cantidad'],
 			...data.cotsPorEstado.map((e) => [e.estado, e._count.estado]),
 			[],
+			['Método de pago', 'Pagos', 'Monto'],
+			...data.ingresosPorMetodo.map((m) => [m.metodo, m.cantidad, formatMoney(m.monto)]),
+			[],
 			['Número', 'Cliente', 'Fecha', 'Total', 'Estado'],
 			...data.ultimasCots.map((c) => [
 				c.numero,
@@ -79,6 +82,9 @@ export const GET = async ({ url }) => {
 
 		const estados = [['Estado', 'Cantidad'], ...data.cotsPorEstado.map((e) => [e.estado, e._count.estado])];
 		XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(estados), 'Estados');
+
+		const metodos = [['Método de pago', 'Pagos', 'Monto'], ...data.ingresosPorMetodo.map((m) => [m.metodo, m.cantidad, m.monto])];
+		XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(metodos), 'Metodos de pago');
 
 		const ultimas = [
 			['Número', 'Cliente', 'Fecha', 'Total', 'Estado'],
