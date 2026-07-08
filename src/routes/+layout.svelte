@@ -64,7 +64,8 @@
 								<path d="M44 54 L44 82 C44 88 56 88 56 82 L56 54 Z" fill="#1e3a8a" />
 							</svg>
 							<div>
-								<h1 class="text-lg font-bold tracking-tight leading-tight">PINTA Gestor PYME</h1>
+								<h1 class="text-lg font-bold tracking-tight leading-none">PINTA</h1>
+								<p class="text-sm font-semibold leading-tight">Gestor PYME</p>
 								<p class="text-blue-300 text-xs mt-0.5">Sistema de Gestión</p>
 							</div>
 						</div>
