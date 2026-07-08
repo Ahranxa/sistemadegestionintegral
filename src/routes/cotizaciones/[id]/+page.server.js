@@ -13,7 +13,7 @@ const transicionesPermitidas = {
 	PAGADA: []
 };
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
 	const cotizacion = await prisma.cotizacion.findUnique({
 		where: { id: params.id },
 		include: {
@@ -35,7 +35,9 @@ export const load = async ({ params }) => {
 	return serialize({
 		cotizacion,
 		totalPagado,
-		saldoPendiente
+		saldoPendiente,
+		userRole: locals.userRole,
+		user: locals.user
 	});
 };
 
