@@ -1,15 +1,20 @@
 import { withClerkHandler } from 'svelte-clerk/server';
-import { env } from '$env/dynamic/private';
+import { env as privateEnv } from '$env/dynamic/private';
+import { env as publicEnv } from '$env/dynamic/public';
 import { sequence } from '@sveltejs/kit/hooks';
 import { getRole } from '$lib/roles.js';
 
 const clerkHandler = withClerkHandler({
-	publishableKey: env.PUBLIC_CLERK_PUBLISHABLE_KEY,
-	secretKey: env.CLERK_SECRET_KEY
+	publishableKey: publicEnv.PUBLIC_CLERK_PUBLISHABLE_KEY,
+	secretKey: privateEnv.CLERK_SECRET_KEY
 });
 
 const roleHandler = async ({ event, resolve }) => {
-	console.error('[hooks] Clerk keys present:', !!env.PUBLIC_CLERK_PUBLISHABLE_KEY, !!env.CLERK_SECRET_KEY);
+	console.error(
+		'[hooks] Clerk keys present:',
+		!!publicEnv.PUBLIC_CLERK_PUBLISHABLE_KEY,
+		!!privateEnv.CLERK_SECRET_KEY
+	);
 	const auth = event.locals.auth();
 	const user = auth?.user;
 	let role = getRole(user);
