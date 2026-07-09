@@ -54,8 +54,9 @@ export const actions = {
 		if (!['ENTRADA', 'AJUSTE', 'DEVOLUCION', 'STOCK_INICIAL'].includes(tipo)) {
 			return fail(400, { error: 'Tipo de movimiento invalido' });
 		}
-		if (isNaN(cantidad) || cantidad <= 0) {
-			return fail(400, { error: 'La cantidad debe ser mayor a 0' });
+		const cantidadInvalida = isNaN(cantidad) || (tipo === 'AJUSTE' ? cantidad < 0 : cantidad <= 0);
+		if (cantidadInvalida) {
+			return fail(400, { error: tipo === 'AJUSTE' ? 'La cantidad no puede ser negativa' : 'La cantidad debe ser mayor a 0' });
 		}
 
 		try {
