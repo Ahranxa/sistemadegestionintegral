@@ -36,9 +36,10 @@ export const POST = async ({ request }) => {
 			stockActual: Number(producto.stockActual)
 		});
 	} catch (err) {
+		console.error('Error crear producto:', err);
 		if (err.code === 'P2002') {
 			return json({ error: 'El SKU ya existe' }, { status: 400 });
 		}
-		return json({ error: 'Error al crear el producto' }, { status: 500 });
+		return json({ error: err.message || 'Error al crear el producto' }, { status: 500 });
 	}
 };
