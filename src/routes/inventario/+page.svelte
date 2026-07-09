@@ -35,6 +35,26 @@
 		showModal = true;
 	}
 
+	// Modal historial
+	let showHistorial = $state(false);
+	let historialProducto = $state(null);
+	let historialMovimientos = $state([]);
+	let historialCargando = $state(false);
+
+	async function abrirHistorial(prod) {
+		historialProducto = prod;
+		historialMovimientos = [];
+		historialCargando = true;
+		showHistorial = true;
+		try {
+			const res = await fetch('/api/inventario/historial?productoId=' + prod.id);
+			historialMovimientos = await res.json();
+		} catch (e) {
+			historialMovimientos = [];
+		}
+		historialCargando = false;
+	}
+
 	// Modal exportación
 	let showExport = $state(false);
 	let expFechaInicio = $state('');
@@ -115,13 +135,23 @@
 		expCargando = false;
 	}
 
-	// Categorías únicas para el selector
 	let categorias = $derived([...new Set(data.inventario.map(p => p.categoria).filter(Boolean))].sort());
 
 	function badge(p) {
 		if (p.stockDisponible === 0) return { texto: 'Sin existencias', clase: 'bg-red-100 text-red-700' };
 		if (p.stockDisponible <= p.stockMinimo) return { texto: 'Stock bajo', clase: 'bg-yellow-100 text-yellow-700' };
 		return { texto: 'Disponible', clase: 'bg-green-100 text-green-700' };
+	}
+
+	function badgeTipo(tipo) {
+		const map = {
+			ENTRADA: 'bg-green-100 text-green-700',
+			SALIDA: 'bg-red-100 text-red-700',
+			AJUSTE: 'bg-blue-100 text-blue-700',
+			DEVOLUCION: 'bg-purple-100 text-purple-700',
+			STOCK_INICIAL: 'bg-gray-100 text-gray-600'
+		};
+		return map[tipo] || 'bg-gray-100 text-gray-600';
 	}
 
 	function fmt(v) {
@@ -131,6 +161,11 @@
 	function fmtFecha(f) {
 		if (!f) return '—';
 		return new Date(f).toLocaleDateString('es-MX');
+	}
+
+	function fmtFechaHora(f) {
+		if (!f) return '—';
+		return new Date(f).toLocaleString('es-MX', { dateStyle: 'short', timeStyle: 'short' });
 	}
 
 	const enhanceHandler = () => {
@@ -147,7 +182,7 @@
 <div class="space-y-6">
 	<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 		<h1 class="text-2xl font-bold text-gray-800">Inventario</h1>
-		<button onclick={() => { showExport = true; expError = ''; }}
+		<button onclick={() => { showExport = true; expError = ''; expProductoId = ''; }}
 			class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
 			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -180,7 +215,7 @@
 		</div>
 	</div>
 
-	<!-- Filtros de tabla -->
+	<!-- Filtros -->
 	<div class="flex flex-col sm:flex-row gap-3">
 		<input type="text" bind:value={busqueda} placeholder="Buscar por nombre, SKU o categoria..."
 			class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" />
@@ -237,8 +272,8 @@
 									class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200">Ajuste</button>
 								<button onclick={() => abrirModal(p, 'DEVOLUCION')}
 									class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200">Devolucion</button>
-								<button onclick={() => { expProductoId = p.id; showExport = true; expError = ''; }}
-									class="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">Historial</button>
+								<button onclick={() => abrirHistorial(p)}
+									class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Historial</button>
 							</div>
 						</td>
 					</tr>
@@ -303,13 +338,72 @@
 	</div>
 {/if}
 
+<!-- ── Modal historial ── -->
+{#if showHistorial && historialProducto}
+	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+		<div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+				<div>
+					<h2 class="text-lg font-semibold text-gray-800">Historial de movimientos</h2>
+					<p class="text-sm text-gray-500 mt-0.5">{historialProducto.nombre} · <span class="font-mono text-xs">{historialProducto.sku}</span></p>
+				</div>
+				<button onclick={() => (showHistorial = false)} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+			</div>
+
+			<div class="overflow-y-auto flex-1">
+				{#if historialCargando}
+					<div class="flex items-center justify-center py-16 text-gray-400 text-sm">Cargando...</div>
+				{:else if !Array.isArray(historialMovimientos) || historialMovimientos.length === 0}
+					<div class="flex items-center justify-center py-16 text-gray-400 text-sm">Sin movimientos registrados.</div>
+				{:else}
+					<table class="min-w-full text-sm">
+						<thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider sticky top-0">
+							<tr>
+								<th class="px-4 py-3 text-left">Fecha</th>
+								<th class="px-4 py-3 text-left">Movimiento</th>
+								<th class="px-4 py-3 text-right">Cantidad</th>
+								<th class="px-4 py-3 text-right">Stock anterior</th>
+								<th class="px-4 py-3 text-right">Stock nuevo</th>
+								<th class="px-4 py-3 text-left">Usuario</th>
+								<th class="px-4 py-3 text-left">Referencia</th>
+								<th class="px-4 py-3 text-left">Observaciones</th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-gray-100">
+							{#each historialMovimientos as m}
+								<tr class="hover:bg-gray-50">
+									<td class="px-4 py-3 text-gray-600 whitespace-nowrap">{fmtFechaHora(m.fecha)}</td>
+									<td class="px-4 py-3">
+										<span class="px-2 py-0.5 rounded-full text-xs font-medium {badgeTipo(m.tipo)}">{m.tipo}</span>
+									</td>
+									<td class="px-4 py-3 text-right font-medium text-gray-800">{m.cantidad}</td>
+									<td class="px-4 py-3 text-right text-gray-500">{m.stockAnterior}</td>
+									<td class="px-4 py-3 text-right font-medium {m.stockNuevo > m.stockAnterior ? 'text-green-700' : m.stockNuevo < m.stockAnterior ? 'text-red-600' : 'text-gray-700'}">{m.stockNuevo}</td>
+									<td class="px-4 py-3 text-gray-600">{m.usuario || '—'}</td>
+									<td class="px-4 py-3 text-gray-500 font-mono text-xs">{m.referencia || '—'}</td>
+									<td class="px-4 py-3 text-gray-500 max-w-xs truncate">{m.observaciones || '—'}</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				{/if}
+			</div>
+
+			<div class="px-6 py-4 border-t border-gray-100 shrink-0 flex justify-end">
+				<button onclick={() => (showHistorial = false)}
+					class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Cerrar</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
 <!-- ── Modal exportación ── -->
 {#if showExport}
 	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
 		<div class="bg-white rounded-xl shadow-2xl w-full max-w-xl my-4">
 			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
 				<h2 class="text-lg font-semibold text-gray-800">Exportar inventario</h2>
-				<button onclick={() => { showExport = false; expProductoId = ''; }} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+				<button onclick={() => { showExport = false; }} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
 			</div>
 
 			<div class="px-6 py-5 space-y-5">
@@ -392,7 +486,7 @@
 				{/if}
 
 				<div class="flex justify-end gap-3 pt-1">
-					<button type="button" onclick={() => { showExport = false; expProductoId = ''; }}
+					<button type="button" onclick={() => { showExport = false; }}
 						class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Cancelar</button>
 					<button type="button" onclick={() => exportar('csv')} disabled={expCargando}
 						class="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm hover:bg-gray-800 disabled:opacity-50">
