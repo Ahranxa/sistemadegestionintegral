@@ -1,16 +1,12 @@
 import { fail } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
+import { serialize } from '$lib/serialize.js';
 
 export const load = async () => {
-	try {
-		const productos = await prisma.producto.findMany({
-			orderBy: { creadoEn: 'desc' }
-		});
-		return { productos };
-	} catch (err) {
-		console.error('Error cargando productos:', err);
-		throw err;
-	}
+	const productos = await prisma.producto.findMany({
+		orderBy: { creadoEn: 'desc' }
+	});
+	return serialize({ productos });
 };
 
 export const actions = {
