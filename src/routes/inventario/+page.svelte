@@ -381,7 +381,7 @@
 									<td class="px-4 py-3 text-right font-medium {m.stockNuevo > m.stockAnterior ? 'text-green-700' : m.stockNuevo < m.stockAnterior ? 'text-red-600' : 'text-gray-700'}">{m.stockNuevo}</td>
 									<td class="px-4 py-3 text-gray-600">{m.usuario || '—'}</td>
 									<td class="px-4 py-3 text-gray-500 font-mono text-xs">{m.referencia || '—'}</td>
-									<td class="px-4 py-3 text-gray-500 max-w-xs truncate">{m.observaciones || '—'}</td>
+									<td class="px-4 py-3 text-gray-500 whitespace-normal break-words max-w-sm">{m.observaciones || '—'}</td>
 								</tr>
 							{/each}
 						</tbody>
