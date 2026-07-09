@@ -26,7 +26,7 @@ export const GET = async ({ url }) => {
 			unidad: true,
 			precioBase: true,
 			ivaPct: true,
-			stockActual: true
+			stockFisico: true
 		},
 		orderBy: { nombre: 'asc' },
 		take: 10
@@ -37,7 +37,7 @@ export const GET = async ({ url }) => {
 			...p,
 			precioBase: Number(p.precioBase),
 			ivaPct: Number(p.ivaPct),
-			stockActual: Number(p.stockActual)
+			stockFisico: Number(p.stockFisico)
 		}))
 	);
 };

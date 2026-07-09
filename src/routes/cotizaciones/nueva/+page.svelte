@@ -205,7 +205,7 @@
 											<div class="text-right shrink-0">
 												<p class="text-sm font-semibold text-indigo-700">{fmt(prod.precioBase)}</p>
 												{#if prod.tipo === 'PRODUCTO'}
-													<p class="text-xs text-gray-400">Stock: {prod.stockActual}</p>
+													<p class="text-xs text-gray-400">Stock: {prod.stockFisico}</p>
 												{/if}
 											</div>
 										</button>
