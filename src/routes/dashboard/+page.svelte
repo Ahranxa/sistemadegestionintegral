@@ -295,6 +295,54 @@
 			</table>
 		</div>
 
+	<!-- Indicadores de inventario -->
+	<div class="bg-white rounded-lg shadow p-6">
+		<div class="flex items-center justify-between mb-4">
+			<h2 class="text-lg font-semibold text-gray-800">Resumen de inventario</h2>
+			<a href="/inventario" class="text-indigo-600 text-sm hover:underline">Ver inventario →</a>
+		</div>
+		<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+			<div class="text-center">
+				<p class="text-2xl font-bold text-yellow-600">{data.inventario?.stockBajo ?? 0}</p>
+				<p class="text-xs text-gray-500 mt-1">Stock bajo</p>
+			</div>
+			<div class="text-center">
+				<p class="text-2xl font-bold text-red-600">{data.inventario?.agotados ?? 0}</p>
+				<p class="text-xs text-gray-500 mt-1">Agotados</p>
+			</div>
+			<div class="text-center">
+				<p class="text-lg font-bold text-indigo-700">{formatearMoneda(data.inventario?.valorTotal ?? 0)}</p>
+				<p class="text-xs text-gray-500 mt-1">Valor en almacen</p>
+			</div>
+			<div class="text-center">
+				<p class="text-lg font-bold text-orange-600">{formatearMoneda(data.inventario?.stockComprometido ?? 0)}</p>
+				<p class="text-xs text-gray-500 mt-1">Stock comprometido</p>
+			</div>
+		</div>
+		{#if data.inventario?.topReservados?.length > 0}
+			<div class="overflow-x-auto">
+				<table class="w-full text-sm">
+					<thead class="bg-gray-50 text-gray-500 text-xs">
+						<tr>
+							<th class="px-3 py-2 text-left">Producto</th>
+							<th class="px-3 py-2 text-right">Reservado</th>
+							<th class="px-3 py-2 text-right">Disponible</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-100">
+						{#each data.inventario.topReservados as p}
+							<tr>
+								<td class="px-3 py-2 text-gray-800">{p.nombre}</td>
+								<td class="px-3 py-2 text-right text-orange-600 font-medium">{p.reservado}</td>
+								<td class="px-3 py-2 text-right font-medium">{p.disponible}</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		{/if}
+	</div>
+
 		<div class="bg-white rounded-lg shadow overflow-x-auto">
 			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">{tituloTopClientes}</h2>
 			<table class="w-full min-w-[300px] text-sm mt-4">

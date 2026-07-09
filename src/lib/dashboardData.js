@@ -158,6 +158,27 @@ export async function getDashboardData({ clienteId = null, fechaInicioParam = nu
 		return acc;
 	}, []);
 
+	// Indicadores de inventario
+	const productosInv = await prisma.producto.findMany({
+		where: { tipo: 'PRODUCTO', activo: true },
+		include: { reservas: { where: { estatus: 'ACTIVA' } } }
+	});
+
+	const invStats = productosInv.map((p) => {
+		const reservado = p.reservas.reduce((s, r) => s + Number(r.cantidad), 0);
+		const disponible = Math.max(0, Number(p.stockFisico) - reservado);
+		return { nombre: p.nombre, stockFisico: Number(p.stockFisico), reservado, disponible, stockMinimo: Number(p.stockMinimo), precioBase: Number(p.precioBase) };
+	});
+
+	const invStockBajo = invStats.filter((p) => p.disponible > 0 && p.disponible <= p.stockMinimo).length;
+	const invAgotados = invStats.filter((p) => p.disponible === 0).length;
+	const invValorTotal = invStats.reduce((s, p) => s + p.stockFisico * p.precioBase, 0);
+	const invStockComprometido = invStats.reduce((s, p) => s + p.reservado * p.precioBase, 0);
+	const invTopReservados = invStats
+		.filter((p) => p.reservado > 0)
+		.sort((a, b) => b.reservado - a.reservado)
+		.slice(0, 5);
+
 	return {
 		totalFacturado,
 		totalCobrado,
@@ -171,6 +192,13 @@ export async function getDashboardData({ clienteId = null, fechaInicioParam = nu
 		clientes,
 		cotizacionesMes,
 		pagosMes,
+		inventario: {
+			stockBajo: invStockBajo,
+			agotados: invAgotados,
+			valorTotal: invValorTotal,
+			stockComprometido: invStockComprometido,
+			topReservados: invTopReservados
+		},
 		filtros: {
 			clienteId,
 			fechaInicio: usandoFiltroFecha ? formatearFechaInput(fechaInicio) : null,

@@ -32,22 +32,68 @@ enum TipoProducto {
   SERVICIO
 }
 
+enum TipoMovimiento {
+  ENTRADA
+  SALIDA
+  AJUSTE
+  DEVOLUCION
+  STOCK_INICIAL
+}
+
+enum EstatusReserva {
+  ACTIVA
+  LIBERADA
+  CONSUMIDA
+}
+
 model Producto {
-  id            String        @id @default(cuid())
-  sku           String        @unique
+  id            String                @id @default(cuid())
+  sku           String                @unique
   nombre        String
   descripcion   String?
   categoria     String?
-  tipo          TipoProducto  @default(PRODUCTO)
-  unidad        String        @default("pza")
-  precioBase    Decimal       @db.Decimal(12, 2)
-  ivaPct        Decimal       @db.Decimal(5, 2) @default(16)
-  stockActual   Decimal       @db.Decimal(10, 2) @default(0)
-  stockMinimo   Decimal       @db.Decimal(10, 2) @default(0)
-  activo        Boolean       @default(true)
+  tipo          TipoProducto          @default(PRODUCTO)
+  unidad        String                @default("pza")
+  precioBase    Decimal               @db.Decimal(12, 2)
+  ivaPct        Decimal               @db.Decimal(5, 2) @default(16)
+  stockFisico   Decimal               @db.Decimal(10, 2) @default(0)
+  stockMinimo   Decimal               @db.Decimal(10, 2) @default(0)
+  activo        Boolean               @default(true)
   conceptos     ConceptoCot[]
-  creadoEn      DateTime      @default(now())
-  actualizadoEn DateTime      @updatedAt
+  reservas      ReservaInventario[]
+  movimientos   MovimientoInventario[]
+  creadoEn      DateTime              @default(now())
+  actualizadoEn DateTime              @updatedAt
+}
+
+model ReservaInventario {
+  id               String         @id @default(cuid())
+  productoId       String
+  producto         Producto       @relation(fields: [productoId], references: [id])
+  cotizacionId     String
+  cotizacion       Cotizacion     @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
+  cantidad         Decimal        @db.Decimal(10, 2)
+  fechaReserva     DateTime       @default(now())
+  fechaVencimiento DateTime?
+  estatus          EstatusReserva @default(ACTIVA)
+  creadoEn         DateTime       @default(now())
+  actualizadoEn    DateTime       @updatedAt
+}
+
+model MovimientoInventario {
+  id                  String         @id @default(cuid())
+  productoId          String
+  producto            Producto       @relation(fields: [productoId], references: [id])
+  tipoMovimiento      TipoMovimiento
+  cantidad            Decimal        @db.Decimal(10, 2)
+  stockFisicoAnterior Decimal        @db.Decimal(10, 2)
+  stockFisicoNuevo    Decimal        @db.Decimal(10, 2)
+  referencia          String?
+  usuarioId           String?
+  usuarioNombre       String?
+  observaciones       String?
+  fecha               DateTime       @default(now())
+  creadoEn            DateTime       @default(now())
 }
 
 model Cliente {
@@ -82,6 +128,7 @@ model Cotizacion {
   pagos           Pago[]
   historial       HistorialCot[]
   recordatorios   LogRecordatorio[]
+  reservas        ReservaInventario[]
   creadoPorId     String?
   creadoPorEmail  String?
   creadoPorNombre String?

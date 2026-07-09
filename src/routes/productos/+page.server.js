@@ -32,7 +32,7 @@ export const actions = {
 					unidad: raw.unidad || 'pza',
 					precioBase: Number(raw.precioBase),
 					ivaPct: Number(raw.ivaPct ?? 16),
-					stockActual: Number(raw.stockActual ?? 0),
+					stockFisico: Number(raw.stockFisico ?? 0),
 					stockMinimo: Number(raw.stockMinimo ?? 0)
 				}
 			});
@@ -68,7 +68,7 @@ export const actions = {
 					unidad: raw.unidad || 'pza',
 					precioBase: Number(raw.precioBase),
 					ivaPct: Number(raw.ivaPct ?? 16),
-					stockActual: Number(raw.stockActual ?? 0),
+					stockFisico: Number(raw.stockFisico ?? 0),
 					stockMinimo: Number(raw.stockMinimo ?? 0)
 				}
 			});

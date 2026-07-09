@@ -138,8 +138,8 @@
 						<td class="px-4 py-3 text-gray-600">{p.unidad}</td>
 						<td class="px-4 py-3 text-right text-gray-800">{formatearMoneda(Number(p.precioBase))}</td>
 						<td class="px-4 py-3 text-right text-gray-600">{Number(p.ivaPct)}%</td>
-						<td class="px-4 py-3 text-right {Number(p.stockActual) <= Number(p.stockMinimo) && p.tipo === 'PRODUCTO' ? 'text-red-600 font-semibold' : 'text-gray-600'}">
-							{p.tipo === 'SERVICIO' ? '—' : Number(p.stockActual)}
+						<td class="px-4 py-3 text-right {Number(p.stockFisico) <= Number(p.stockMinimo) && p.tipo === 'PRODUCTO' ? 'text-red-600 font-semibold' : 'text-gray-600'}">
+							{p.tipo === 'SERVICIO' ? '—' : Number(p.stockFisico)}
 						</td>
 						<td class="px-4 py-3">
 							<span class="px-2 py-0.5 rounded-full text-xs font-medium {p.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
@@ -311,8 +311,8 @@
 						<label class="block text-sm font-medium text-gray-700 mb-1">Stock actual</label>
 						<input
 							type="number"
-							name="stockActual"
-							value={productoEditando?.stockActual !== undefined ? Number(productoEditando.stockActual) : 0}
+							name="stockFisico"
+							value={productoEditando?.stockFisico !== undefined ? Number(productoEditando.stockFisico) : 0}
 							min="0"
 							step="0.01"
 							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
