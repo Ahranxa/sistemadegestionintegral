@@ -113,7 +113,9 @@ export const actions = {
 					await tx.conceptoCot.create({
 						data: {
 							cotizacionId: creada.id,
+							productoId: con.productoId || null,
 							descripcion: con.descripcion,
+							unidad: con.unidad || null,
 							cantidad: con.cantidad,
 							precioUnitario: con.precioUnitario,
 							subtotal: con.cantidad * con.precioUnitario,

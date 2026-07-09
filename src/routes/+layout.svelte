@@ -12,6 +12,7 @@
 	const navLinks = $derived([
 		{ href: '/dashboard', label: 'Dashboard', icon: '📊' },
 		{ href: '/clientes', label: 'Clientes', icon: '👥' },
+		{ href: '/productos', label: 'Productos', icon: '📦' },
 		{ href: '/cotizaciones', label: 'Cotizaciones', icon: '📄' },
 		{ href: '/cobranza', label: 'Cobranza', icon: '💰' },
 		...(isAdmin ? [{ href: '/admin/usuarios', label: 'Admin', icon: '⚙️' }] : [])

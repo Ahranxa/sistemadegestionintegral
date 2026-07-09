@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 export const conceptoSchema = z.object({
+	productoId: z.string().optional().nullable(),
 	descripcion: z.string().min(1, 'La descripción es requerida'),
+	unidad: z.string().optional().nullable(),
 	cantidad: z.coerce.number().min(0.01, 'La cantidad debe ser mayor a 0'),
 	precioUnitario: z.coerce.number().min(0, 'El precio unitario debe ser mayor o igual a 0')
 });
