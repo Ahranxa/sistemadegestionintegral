@@ -51,7 +51,7 @@ export async function getDashboardData({ clienteId = null, fechaInicioParam = nu
 		}),
 		prisma.pago.findMany({
 			where: {
-				fecha: whereRango,
+				creadoEn: whereRango,
 				...(clienteId ? { cotizacion: { clienteId } } : {})
 			},
 			include: { cotizacion: { include: { cliente: true } } }
@@ -158,26 +158,48 @@ export async function getDashboardData({ clienteId = null, fechaInicioParam = nu
 		return acc;
 	}, []);
 
-	// Indicadores de inventario
-	const productosInv = await prisma.producto.findMany({
-		where: { tipo: 'PRODUCTO', activo: true },
-		include: { reservas: { where: { estatus: 'ACTIVA' } } }
-	});
+	// Indicadores de inventario (con protección si las tablas nuevas aún no están en el cliente Prisma)
+	let invStockBajo = 0, invAgotados = 0, invValorTotal = 0, invStockComprometido = 0, invTopReservados = [];
+	try {
+		const productosInv = await prisma.producto.findMany({
+			where: { tipo: 'PRODUCTO', activo: true }
+		});
 
-	const invStats = productosInv.map((p) => {
-		const reservado = p.reservas.reduce((s, r) => s + Number(r.cantidad), 0);
-		const disponible = Math.max(0, Number(p.stockFisico) - reservado);
-		return { nombre: p.nombre, stockFisico: Number(p.stockFisico), reservado, disponible, stockMinimo: Number(p.stockMinimo), precioBase: Number(p.precioBase) };
-	});
+		// Calcular reservas activas por producto en una sola consulta agregada
+		let reservasPorProducto = {};
+		try {
+			const reservasActivas = await prisma.reservaInventario.groupBy({
+				by: ['productoId'],
+				where: { estatus: 'ACTIVA' },
+				_sum: { cantidad: true }
+			});
+			reservasPorProducto = Object.fromEntries(
+				reservasActivas.map((r) => [r.productoId, Number(r._sum.cantidad ?? 0)])
+			);
+		} catch (_) {
+			// tabla ReservaInventario aún no existe en el cliente
+		}
 
-	const invStockBajo = invStats.filter((p) => p.disponible > 0 && p.disponible <= p.stockMinimo).length;
-	const invAgotados = invStats.filter((p) => p.disponible === 0).length;
-	const invValorTotal = invStats.reduce((s, p) => s + p.stockFisico * p.precioBase, 0);
-	const invStockComprometido = invStats.reduce((s, p) => s + p.reservado * p.precioBase, 0);
-	const invTopReservados = invStats
-		.filter((p) => p.reservado > 0)
-		.sort((a, b) => b.reservado - a.reservado)
-		.slice(0, 5);
+		const invStats = productosInv.map((p) => {
+			const reservado = reservasPorProducto[p.id] ?? 0;
+			const stockFis = Number(p.stockFisico ?? 0);
+			const disponible = Math.max(0, stockFis - reservado);
+			const minimo = Number(p.stockMinimo ?? 0);
+			const precio = Number(p.precioBase ?? 0);
+			return { nombre: p.nombre, stockFisico: stockFis, reservado, disponible, stockMinimo: minimo, precioBase: precio };
+		});
+
+		invStockBajo = invStats.filter((p) => p.disponible > 0 && p.disponible <= p.stockMinimo).length;
+		invAgotados = invStats.filter((p) => p.disponible === 0).length;
+		invValorTotal = invStats.reduce((s, p) => s + p.stockFisico * p.precioBase, 0);
+		invStockComprometido = invStats.reduce((s, p) => s + p.reservado * p.precioBase, 0);
+		invTopReservados = invStats
+			.filter((p) => p.reservado > 0)
+			.sort((a, b) => b.reservado - a.reservado)
+			.slice(0, 5);
+	} catch (err) {
+		console.error('[dashboardData] Error en indicadores de inventario:', err.message);
+	}
 
 	return {
 		totalFacturado,
