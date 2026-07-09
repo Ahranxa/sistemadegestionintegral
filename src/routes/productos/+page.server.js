@@ -2,10 +2,15 @@ import { fail } from '@sveltejs/kit';
 import { prisma } from '$lib/prisma.js';
 
 export const load = async () => {
-	const productos = await prisma.producto.findMany({
-		orderBy: { creadoEn: 'desc' }
-	});
-	return { productos };
+	try {
+		const productos = await prisma.producto.findMany({
+			orderBy: { creadoEn: 'desc' }
+		});
+		return { productos };
+	} catch (err) {
+		console.error('Error cargando productos:', err);
+		throw err;
+	}
 };
 
 export const actions = {
