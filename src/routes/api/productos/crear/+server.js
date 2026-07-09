@@ -19,7 +19,7 @@ export const POST = async ({ request }) => {
 				unidad: unidad || 'pza',
 				precioBase: Number(precioBase),
 				ivaPct: Number(ivaPct ?? 16),
-				stockActual: Number(stockInicial ?? 0),
+				stockFisico: Number(stockInicial ?? 0),
 				stockMinimo: 0
 			}
 		});
@@ -33,7 +33,7 @@ export const POST = async ({ request }) => {
 			unidad: producto.unidad,
 			precioBase: Number(producto.precioBase),
 			ivaPct: Number(producto.ivaPct),
-			stockActual: Number(producto.stockActual)
+			stockFisico: Number(producto.stockFisico)
 		});
 	} catch (err) {
 		console.error('Error crear producto:', err);
