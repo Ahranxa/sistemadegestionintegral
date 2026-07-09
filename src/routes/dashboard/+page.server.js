@@ -14,10 +14,12 @@ export const load = async ({ url }) => {
 		carteraPendiente: data.carteraPendiente,
 		cotsActivas: data.cotsActivas,
 		ingresosPorMes: data.ingresosPorMes,
+		ingresosPorMetodo: data.ingresosPorMetodo,
 		cotsPorEstado: data.cotsPorEstado,
 		ultimasCots: data.ultimasCots,
 		topClientes: data.topClientes,
 		clientes: data.clientes,
+		inventario: data.inventario,
 		filtros: data.filtros
 	});
 };
