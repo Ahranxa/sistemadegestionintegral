@@ -30,7 +30,7 @@
 	function abrirModal(prod, tipo) {
 		modalProducto = prod;
 		modalTipo = tipo;
-		cantidad = 1;
+			cantidad = tipo === 'AJUSTE' ? (prod?.stockFisico ?? 0) : 1;
 		observaciones = '';
 		showModal = true;
 	}
@@ -313,7 +313,7 @@
 					<label class="block text-sm font-medium text-gray-700 mb-1">
 						{modalTipo === 'AJUSTE' ? 'Nuevo stock fisico' : 'Cantidad'}
 					</label>
-					<input type="number" name="cantidad" bind:value={cantidad} min="0.01" step="0.01" required
+					<input type="number" name="cantidad" bind:value={cantidad} min={modalTipo === 'AJUSTE' ? 0 : 1} step="1" required
 						class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
 					{#if modalTipo !== 'AJUSTE'}
 						<p class="text-xs text-gray-500 mt-1">Nuevo stock: <strong>{modalProducto.stockFisico + cantidad}</strong></p>
