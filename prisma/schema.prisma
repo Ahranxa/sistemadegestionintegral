@@ -202,3 +202,30 @@ model LogRecordatorio {
   exitoso          Boolean    @default(true)
   error            String?
 }
+
+model ExperienceSession {
+  id              String            @id @default(cuid())
+  userId          String
+  startedAt       DateTime          @default(now())
+  endedAt         DateTime?
+  route           String?
+  module          String?
+  durationSeconds Int?
+  eventsCount     Int               @default(0)
+  events          ExperienceEvent[]
+  creadoEn        DateTime          @default(now())
+  actualizadoEn   DateTime          @updatedAt
+}
+
+model ExperienceEvent {
+  id         String            @id @default(cuid())
+  sessionId  String
+  session    ExperienceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  userId     String
+  route      String?
+  module     String?
+  emotion    String
+  score      Float
+  detectedAt DateTime          @default(now())
+  creadoEn   DateTime          @default(now())
+}

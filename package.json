@@ -26,6 +26,7 @@
     "vite": "^6.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@prisma/client": "^5.22.0",
     "chart.js": "^4.5.1",
     "jspdf": "^4.2.1",

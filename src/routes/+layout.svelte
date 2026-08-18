@@ -2,6 +2,8 @@
 	import '../app.css';
 	import { page } from '$app/stores';
 	import { ClerkProvider, SignedIn, SignedOut, UserButton } from 'svelte-clerk';
+	import AssistantFab from '$lib/components/AssistantFab.svelte';
+	import ExperienceControl from '$lib/components/ExperienceControl.svelte';
 
 	let { children, data } = $props();
 
@@ -16,6 +18,7 @@
 		{ href: '/inventario', label: 'Inventario', icon: '🏭' },
 		{ href: '/cotizaciones', label: 'Cotizaciones', icon: '📄' },
 		{ href: '/cobranza', label: 'Cobranza', icon: '💰' },
+		{ href: '/experiencia', label: 'Experiencia', icon: '😊' },
 		...(isAdmin ? [{ href: '/admin/usuarios', label: 'Admin', icon: '⚙️' }] : [])
 	]);
 
@@ -128,6 +131,8 @@
 					<main class="flex-1 overflow-y-auto p-4 md:p-6">
 						{@render children()}
 					</main>
+					<AssistantFab />
+					<ExperienceControl />
 				</div>
 			</div>
 		</SignedIn>

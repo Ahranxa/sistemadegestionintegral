@@ -302,20 +302,20 @@
 			<a href="/inventario" class="text-indigo-600 text-sm hover:underline">Ver inventario →</a>
 		</div>
 		<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-			<div class="text-center">
-				<p class="text-2xl font-bold text-yellow-600">{data.inventario?.stockBajo ?? 0}</p>
+			<div class="text-center min-w-0">
+				<p class="text-xl sm:text-2xl font-bold text-yellow-600">{data.inventario?.stockBajo ?? 0}</p>
 				<p class="text-xs text-gray-500 mt-1">Stock bajo</p>
 			</div>
-			<div class="text-center">
-				<p class="text-2xl font-bold text-red-600">{data.inventario?.agotados ?? 0}</p>
+			<div class="text-center min-w-0">
+				<p class="text-xl sm:text-2xl font-bold text-red-600">{data.inventario?.agotados ?? 0}</p>
 				<p class="text-xs text-gray-500 mt-1">Agotados</p>
 			</div>
-			<div class="text-center">
-				<p class="text-lg font-bold text-indigo-700">{formatearMoneda(data.inventario?.valorTotal ?? 0)}</p>
+			<div class="text-center min-w-0">
+				<p class="text-sm sm:text-base font-bold text-indigo-700 break-words">{formatearMoneda(data.inventario?.valorTotal ?? 0)}</p>
 				<p class="text-xs text-gray-500 mt-1">Valor en almacen</p>
 			</div>
-			<div class="text-center">
-				<p class="text-lg font-bold text-orange-600">{formatearMoneda(data.inventario?.stockComprometido ?? 0)}</p>
+			<div class="text-center min-w-0">
+				<p class="text-sm sm:text-base font-bold text-orange-600 break-words">{formatearMoneda(data.inventario?.stockComprometido ?? 0)}</p>
 				<p class="text-xs text-gray-500 mt-1">Stock comprometido</p>
 			</div>
 		</div>
