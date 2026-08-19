@@ -57,7 +57,7 @@
 				label: 'Ingresos',
 				data: data.ingresosPorMes.map((i) => i.total),
 				backgroundColor: '#4F46E5',
-				borderRadius: 6
+				borderRadius: 4
 			}
 		]
 	});
@@ -94,10 +94,10 @@
 	const etiquetaPeriodo = $derived(data.filtros.usandoFiltroFecha ? 'en el periodo' : 'este mes');
 
 	let kpis = $derived([
-		{ label: `Facturado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalFacturado), icono: '💵', color: 'bg-blue-100 text-blue-700' },
-		{ label: `Cobrado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalCobrado), icono: '💰', color: 'bg-green-100 text-green-700' },
-		{ label: 'Cartera pendiente', valor: formatearMoneda(data.carteraPendiente), icono: '💳', color: 'bg-red-100 text-red-700' },
-		{ label: 'Cotizaciones activas', valor: data.cotsActivas.toString(), icono: '📋', color: 'bg-purple-100 text-purple-700' }
+		{ label: `Facturado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalFacturado), color: 'border-indigo-500' },
+		{ label: `Cobrado ${etiquetaPeriodo}`, valor: formatearMoneda(data.totalCobrado), color: 'border-emerald-500' },
+		{ label: 'Cartera pendiente', valor: formatearMoneda(data.carteraPendiente), color: 'border-rose-500' },
+		{ label: 'Cotizaciones activas', valor: data.cotsActivas.toString(), color: 'border-amber-500' }
 	]);
 
 	const tituloGraficaIngresos = $derived(
@@ -114,22 +114,22 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-		<h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+		<h1 class="text-2xl font-semibold text-slate-800">Dashboard</h1>
 		{#if data.filtros.usandoFiltroFecha || data.filtros.clienteId}
-			<span class="text-sm text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full w-fit">
+			<span class="text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-100 px-3 py-1 rounded w-fit">
 				Mostrando datos filtrados
 			</span>
 		{/if}
 	</div>
 
-	<form method="GET" class="bg-white rounded-lg shadow p-4">
+	<form method="GET" class="bg-white rounded border border-slate-200 shadow-sm p-4">
 		<div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 			<div>
-				<label for="clienteId" class="block text-sm font-medium text-gray-700 mb-1">Cliente</label>
+				<label for="clienteId" class="block text-sm font-medium text-slate-700 mb-1.5">Cliente</label>
 				<select
 					id="clienteId"
 					name="clienteId"
-					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+					class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
 				>
 					<option value="">Todos los clientes</option>
 					{#each data.clientes as cliente}
@@ -140,35 +140,35 @@
 				</select>
 			</div>
 			<div>
-				<label for="fechaInicio" class="block text-sm font-medium text-gray-700 mb-1">Fecha inicio</label>
+				<label for="fechaInicio" class="block text-sm font-medium text-slate-700 mb-1.5">Fecha inicio</label>
 				<input
 					id="fechaInicio"
 					name="fechaInicio"
 					type="date"
 					value={data.filtros.fechaInicio || ''}
-					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+					class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
 				/>
 			</div>
 			<div>
-				<label for="fechaFin" class="block text-sm font-medium text-gray-700 mb-1">Fecha fin</label>
+				<label for="fechaFin" class="block text-sm font-medium text-slate-700 mb-1.5">Fecha fin</label>
 				<input
 					id="fechaFin"
 					name="fechaFin"
 					type="date"
 					value={data.filtros.fechaFin || ''}
-					class="w-full border border-gray-300 rounded-lg px-3 py-2"
+					class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
 				/>
 			</div>
 			<div class="flex flex-col gap-2">
 				<button
 					type="submit"
-					class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+					class="w-full bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-indigo-700 transition"
 				>
 					Aplicar filtros
 				</button>
 				<a
 					href="/dashboard"
-					class="w-full text-center bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition"
+					class="w-full text-center bg-slate-100 text-slate-700 px-4 py-2 rounded text-sm font-medium hover:bg-slate-200 transition"
 				>
 					Limpiar
 				</a>
@@ -177,16 +177,16 @@
 	</form>
 
 	<div class="flex flex-wrap items-center gap-3">
-		<span class="text-sm text-gray-600">Descargar reporte:</span>
+		<span class="text-sm text-slate-600">Descargar reporte:</span>
 		<a
 			href={`${baseExport}&formato=csv`}
-			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+			class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-50 transition text-sm font-medium"
 		>
 			CSV
 		</a>
 		<a
 			href={`${baseExport}&formato=xlsx`}
-			class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+			class="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded hover:bg-slate-50 transition text-sm font-medium"
 		>
 			Excel
 		</a>
@@ -194,175 +194,169 @@
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 		{#each kpis as kpi}
-			<div class="bg-white rounded-lg shadow p-5 flex items-center gap-4">
-				<div class="text-3xl {kpi.color} w-12 h-12 flex items-center justify-center rounded-full">
-					{kpi.icono}
-				</div>
-				<div>
-					<p class="text-sm text-gray-500">{kpi.label}</p>
-					<p class="text-xl font-bold text-gray-800">{kpi.valor}</p>
-				</div>
+			<div class="bg-white rounded border border-slate-200 shadow-sm p-5 border-l-4 {kpi.color} min-w-0">
+				<p class="text-sm text-slate-500 break-words">{kpi.label}</p>
+				<p class="text-2xl font-semibold text-slate-900 mt-1 break-words">{kpi.valor}</p>
 			</div>
 		{/each}
 	</div>
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-		<div class="bg-white rounded-lg shadow p-6">
-			<h2 class="text-lg font-semibold text-gray-800 mb-4">{tituloGraficaIngresos}</h2>
+		<div class="bg-white rounded border border-slate-200 shadow-sm p-6">
+			<h2 class="text-base font-semibold text-slate-800 mb-4">{tituloGraficaIngresos}</h2>
 			<Bar data={barData} options={barOptions} />
 		</div>
 
-		<div class="bg-white rounded-lg shadow p-6">
-			<h2 class="text-lg font-semibold text-gray-800 mb-4">Cotizaciones por estado</h2>
+		<div class="bg-white rounded border border-slate-200 shadow-sm p-6">
+			<h2 class="text-base font-semibold text-slate-800 mb-4">Cotizaciones por estado</h2>
 			<Doughnut data={doughnutData} options={doughnutOptions} />
 		</div>
 	</div>
 
 	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-		<div class="bg-white rounded-lg shadow overflow-x-auto">
-			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
-				<h2 class="text-lg font-semibold text-gray-800">Ingresos por método de pago</h2>
+		<div class="bg-white rounded border border-slate-200 shadow-sm overflow-x-auto">
+			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-5 pb-0 gap-3">
+				<h2 class="text-base font-semibold text-slate-800">Ingresos por método de pago</h2>
 				<div class="flex items-center gap-2">
 					<a
 						href="/api/pagos/exportar?formato=csv"
-						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+						class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition font-medium"
 					>
 						CSV
 					</a>
 					<a
 						href="/api/pagos/exportar?formato=xlsx"
-						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+						class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition font-medium"
 					>
 						Excel
 					</a>
 				</div>
 			</div>
 			<table class="w-full min-w-[300px] text-sm mt-4">
-				<thead class="bg-gray-50 text-gray-600">
+				<thead class="bg-slate-50 text-slate-600">
 					<tr>
-						<th class="px-6 py-3">Método</th>
-						<th class="px-6 py-3 text-center">Pagos</th>
-						<th class="px-6 py-3 text-right">Monto</th>
+						<th class="px-5 py-3 text-left font-medium">Método</th>
+						<th class="px-5 py-3 text-center font-medium">Pagos</th>
+						<th class="px-5 py-3 text-right font-medium">Monto</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100">
+				<tbody class="divide-y divide-slate-100">
 					{#each data.ingresosPorMetodo as item}
-						<tr class="hover:bg-gray-50">
-							<td class="px-6 py-4 font-medium text-gray-800">
+						<tr class="hover:bg-slate-50">
+							<td class="px-5 py-4 font-medium text-slate-800 whitespace-normal break-words">
 								{metodosPago[item.metodo] || item.metodo}
 							</td>
-							<td class="px-6 py-4 text-center text-gray-600">{item.cantidad}</td>
-							<td class="px-6 py-4 text-right font-bold text-green-700">
+							<td class="px-5 py-4 text-center text-slate-600">{item.cantidad}</td>
+							<td class="px-5 py-4 text-right font-medium text-emerald-700 whitespace-nowrap">
 								{formatearMoneda(item.monto)}
 							</td>
 						</tr>
 					{:else}
 						<tr>
-							<td colspan="3" class="px-6 py-8 text-center text-gray-500">Sin pagos en el periodo</td>
+							<td colspan="3" class="px-5 py-8 text-center text-slate-500">Sin pagos en el periodo</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
 		</div>
 
-		<div class="bg-white rounded-lg shadow overflow-x-auto">
-			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">Últimas cotizaciones</h2>
+		<div class="bg-white rounded border border-slate-200 shadow-sm overflow-x-auto">
+			<h2 class="text-base font-semibold text-slate-800 p-5 pb-0">Últimas cotizaciones</h2>
 			<table class="w-full min-w-[400px] text-sm mt-4">
-				<thead class="bg-gray-50 text-gray-600">
+				<thead class="bg-slate-50 text-slate-600">
 					<tr>
-						<th class="px-6 py-3">Número</th>
-						<th class="px-6 py-3">Cliente</th>
-						<th class="px-6 py-3">Fecha</th>
-						<th class="px-6 py-3 text-right">Total</th>
+						<th class="px-5 py-3 text-left font-medium">Número</th>
+						<th class="px-5 py-3 text-left font-medium">Cliente</th>
+						<th class="px-5 py-3 text-left font-medium">Fecha</th>
+						<th class="px-5 py-3 text-right font-medium">Total</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100">
+				<tbody class="divide-y divide-slate-100">
 					{#each data.ultimasCots as cot}
-						<tr class="hover:bg-gray-50">
-							<td class="px-6 py-4 font-medium text-indigo-600">
+						<tr class="hover:bg-slate-50">
+							<td class="px-5 py-4 font-medium text-indigo-600 whitespace-nowrap">
 								<a href="/cotizaciones/{cot.id}" class="hover:underline">{cot.numero}</a>
 							</td>
-							<td class="px-6 py-4 text-gray-600">{cot.cliente.nombre}</td>
-							<td class="px-6 py-4 text-gray-600">{formatearFecha(cot.fecha)}</td>
-							<td class="px-6 py-4 text-right text-gray-800">{formatearMoneda(Number(cot.total))}</td>
+							<td class="px-5 py-4 text-slate-600 whitespace-normal break-words">{cot.cliente.nombre}</td>
+							<td class="px-5 py-4 text-slate-600 whitespace-nowrap">{formatearFecha(cot.fecha)}</td>
+							<td class="px-5 py-4 text-right text-slate-800 font-medium whitespace-nowrap">{formatearMoneda(Number(cot.total))}</td>
 						</tr>
 					{:else}
 						<tr>
-							<td colspan="4" class="px-6 py-8 text-center text-gray-500">Sin cotizaciones</td>
+							<td colspan="4" class="px-5 py-8 text-center text-slate-500">Sin cotizaciones</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
 		</div>
 
-	<!-- Indicadores de inventario -->
-	<div class="bg-white rounded-lg shadow p-6">
-		<div class="flex items-center justify-between mb-4">
-			<h2 class="text-lg font-semibold text-gray-800">Resumen de inventario</h2>
-			<a href="/inventario" class="text-indigo-600 text-sm hover:underline">Ver inventario →</a>
-		</div>
-		<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-			<div class="text-center min-w-0">
-				<p class="text-xl sm:text-2xl font-bold text-yellow-600">{data.inventario?.stockBajo ?? 0}</p>
-				<p class="text-xs text-gray-500 mt-1">Stock bajo</p>
+		<div class="bg-white rounded border border-slate-200 shadow-sm p-5">
+			<div class="flex items-center justify-between mb-5">
+				<h2 class="text-base font-semibold text-slate-800">Resumen de inventario</h2>
+				<a href="/inventario" class="text-indigo-600 text-sm font-medium hover:underline">Ver inventario</a>
 			</div>
-			<div class="text-center min-w-0">
-				<p class="text-xl sm:text-2xl font-bold text-red-600">{data.inventario?.agotados ?? 0}</p>
-				<p class="text-xs text-gray-500 mt-1">Agotados</p>
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+				<div class="min-w-0 text-center border-r border-slate-100 last:border-0">
+					<p class="text-xl sm:text-2xl font-semibold text-amber-600 break-words">{data.inventario?.stockBajo ?? 0}</p>
+					<p class="text-xs text-slate-500 mt-1">Stock bajo</p>
+				</div>
+				<div class="min-w-0 text-center border-r border-slate-100 last:border-0">
+					<p class="text-xl sm:text-2xl font-semibold text-rose-600 break-words">{data.inventario?.agotados ?? 0}</p>
+					<p class="text-xs text-slate-500 mt-1">Agotados</p>
+				</div>
+				<div class="min-w-0 text-center border-r border-slate-100 last:border-0">
+					<p class="text-base sm:text-lg font-semibold text-slate-800 break-words">{formatearMoneda(data.inventario?.valorTotal ?? 0)}</p>
+					<p class="text-xs text-slate-500 mt-1">Valor en almacén</p>
+				</div>
+				<div class="min-w-0 text-center">
+					<p class="text-base sm:text-lg font-semibold text-slate-800 break-words">{formatearMoneda(data.inventario?.stockComprometido ?? 0)}</p>
+					<p class="text-xs text-slate-500 mt-1">Stock comprometido</p>
+				</div>
 			</div>
-			<div class="text-center min-w-0">
-				<p class="text-sm sm:text-base font-bold text-indigo-700 break-words">{formatearMoneda(data.inventario?.valorTotal ?? 0)}</p>
-				<p class="text-xs text-gray-500 mt-1">Valor en almacen</p>
-			</div>
-			<div class="text-center min-w-0">
-				<p class="text-sm sm:text-base font-bold text-orange-600 break-words">{formatearMoneda(data.inventario?.stockComprometido ?? 0)}</p>
-				<p class="text-xs text-gray-500 mt-1">Stock comprometido</p>
-			</div>
-		</div>
-		{#if data.inventario?.topReservados?.length > 0}
-			<div class="overflow-x-auto">
-				<table class="w-full text-sm">
-					<thead class="bg-gray-50 text-gray-500 text-xs">
-						<tr>
-							<th class="px-3 py-2 text-left">Producto</th>
-							<th class="px-3 py-2 text-right">Reservado</th>
-							<th class="px-3 py-2 text-right">Disponible</th>
-						</tr>
-					</thead>
-					<tbody class="divide-y divide-gray-100">
-						{#each data.inventario.topReservados as p}
+			{#if data.inventario?.topReservados?.length > 0}
+				<div class="overflow-x-auto">
+					<table class="w-full text-sm">
+						<thead class="bg-slate-50 text-slate-500 text-xs">
 							<tr>
-								<td class="px-3 py-2 text-gray-800">{p.nombre}</td>
-								<td class="px-3 py-2 text-right text-orange-600 font-medium">{p.reservado}</td>
-								<td class="px-3 py-2 text-right font-medium">{p.disponible}</td>
+								<th class="px-3 py-2 text-left font-medium">Producto</th>
+								<th class="px-3 py-2 text-right font-medium">Reservado</th>
+								<th class="px-3 py-2 text-right font-medium">Disponible</th>
 							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		{/if}
-	</div>
+						</thead>
+						<tbody class="divide-y divide-slate-100">
+							{#each data.inventario.topReservados as p}
+								<tr>
+									<td class="px-3 py-2 text-slate-800 whitespace-normal break-words">{p.nombre}</td>
+									<td class="px-3 py-2 text-right text-amber-600 font-medium">{p.reservado}</td>
+									<td class="px-3 py-2 text-right font-medium">{p.disponible}</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			{/if}
+		</div>
 
-		<div class="bg-white rounded-lg shadow overflow-x-auto">
-			<h2 class="text-lg font-semibold text-gray-800 p-6 pb-0">{tituloTopClientes}</h2>
+		<div class="bg-white rounded border border-slate-200 shadow-sm overflow-x-auto">
+			<h2 class="text-base font-semibold text-slate-800 p-5 pb-0">{tituloTopClientes}</h2>
 			<table class="w-full min-w-[300px] text-sm mt-4">
-				<thead class="bg-gray-50 text-gray-600">
+				<thead class="bg-slate-50 text-slate-600">
 					<tr>
-						<th class="px-6 py-3">Cliente</th>
-						<th class="px-6 py-3 text-right">Saldo pendiente</th>
+						<th class="px-5 py-3 text-left font-medium">Cliente</th>
+						<th class="px-5 py-3 text-right font-medium">Saldo pendiente</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100">
+				<tbody class="divide-y divide-slate-100">
 					{#each data.topClientes as cliente}
-						<tr class="hover:bg-gray-50">
-							<td class="px-6 py-4 font-medium text-gray-800">{cliente.nombre}</td>
-							<td class="px-6 py-4 text-right font-bold text-red-700">
+						<tr class="hover:bg-slate-50">
+							<td class="px-5 py-4 font-medium text-slate-800 whitespace-normal break-words">{cliente.nombre}</td>
+							<td class="px-5 py-4 text-right font-semibold text-rose-700 whitespace-nowrap">
 								{formatearMoneda(cliente.pendiente)}
 							</td>
 						</tr>
 					{:else}
 						<tr>
-							<td colspan="2" class="px-6 py-8 text-center text-gray-500">Sin clientes con saldo pendiente</td>
+							<td colspan="2" class="px-5 py-8 text-center text-slate-500">Sin clientes con saldo pendiente</td>
 						</tr>
 					{/each}
 				</tbody>
