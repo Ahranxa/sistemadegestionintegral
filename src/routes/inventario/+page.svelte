@@ -149,9 +149,9 @@
 			SALIDA: 'bg-red-100 text-red-700',
 			AJUSTE: 'bg-blue-100 text-blue-700',
 			DEVOLUCION: 'bg-purple-100 text-purple-700',
-			STOCK_INICIAL: 'bg-gray-100 text-gray-600'
+			STOCK_INICIAL: 'bg-slate-100 text-slate-600'
 		};
-		return map[tipo] || 'bg-gray-100 text-gray-600';
+		return map[tipo] || 'bg-slate-100 text-slate-600';
 	}
 
 	function fmt(v) {
@@ -181,7 +181,7 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-		<h1 class="text-2xl font-bold text-gray-800">Inventario</h1>
+		<h1 class="text-2xl font-bold text-slate-800">Inventario</h1>
 		<button onclick={() => { showExport = true; expError = ''; expProductoId = ''; }}
 			class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
 			<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -198,19 +198,19 @@
 	<!-- KPIs -->
 	<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
 		<div class="bg-white rounded-lg shadow p-4">
-			<p class="text-xs text-gray-500 uppercase tracking-wider">Total productos</p>
-			<p class="text-2xl font-bold text-gray-800 mt-1">{data.inventario.length}</p>
+			<p class="text-xs text-slate-500 uppercase tracking-wider">Total productos</p>
+			<p class="text-2xl font-bold text-slate-800 mt-1">{data.inventario.length}</p>
 		</div>
 		<div class="bg-white rounded-lg shadow p-4">
-			<p class="text-xs text-gray-500 uppercase tracking-wider">Stock bajo</p>
+			<p class="text-xs text-slate-500 uppercase tracking-wider">Stock bajo</p>
 			<p class="text-2xl font-bold text-yellow-600 mt-1">{data.inventario.filter(p => p.activo && p.stockDisponible > 0 && p.stockDisponible <= p.stockMinimo).length}</p>
 		</div>
 		<div class="bg-white rounded-lg shadow p-4">
-			<p class="text-xs text-gray-500 uppercase tracking-wider">Sin existencias</p>
+			<p class="text-xs text-slate-500 uppercase tracking-wider">Sin existencias</p>
 			<p class="text-2xl font-bold text-red-600 mt-1">{data.inventario.filter(p => p.activo && p.stockDisponible === 0).length}</p>
 		</div>
 		<div class="bg-white rounded-lg shadow p-4">
-			<p class="text-xs text-gray-500 uppercase tracking-wider">Valor en almacen</p>
+			<p class="text-xs text-slate-500 uppercase tracking-wider">Valor en almacen</p>
 			<p class="text-lg font-bold text-indigo-700 mt-1">{fmt(data.inventario.reduce((s, p) => s + p.stockFisico * p.precioBase, 0))}</p>
 		</div>
 	</div>
@@ -218,8 +218,8 @@
 	<!-- Filtros -->
 	<div class="flex flex-col sm:flex-row gap-3">
 		<input type="text" bind:value={busqueda} placeholder="Buscar por nombre, SKU o categoria..."
-			class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-		<select bind:value={filtro} class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+			class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm" />
+		<select bind:value={filtro} class="border border-slate-300 rounded-lg px-3 py-2 text-sm">
 			<option value="todos">Todos</option>
 			<option value="suficiente">Stock suficiente</option>
 			<option value="bajo">Stock bajo</option>
@@ -231,7 +231,7 @@
 	<!-- Tabla -->
 	<div class="bg-white rounded-lg shadow overflow-hidden overflow-x-auto">
 		<table class="min-w-full text-left text-sm whitespace-nowrap">
-			<thead class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+			<thead class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
 				<tr>
 					<th class="px-4 py-3">SKU</th>
 					<th class="px-4 py-3">Producto</th>
@@ -246,22 +246,22 @@
 					<th class="px-4 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each filtrados as p}
 					{@const b = badge(p)}
-					<tr class="hover:bg-gray-50 {!p.activo ? 'opacity-50' : ''}">
-						<td class="px-4 py-3 font-mono text-xs text-gray-500">{p.sku}</td>
-						<td class="px-4 py-3 font-medium text-gray-800">{p.nombre}</td>
-						<td class="px-4 py-3 text-gray-600">{p.categoria || '—'}</td>
-						<td class="px-4 py-3 text-gray-600">{p.unidad}</td>
-						<td class="px-4 py-3 text-right text-gray-800 font-medium">{p.stockFisico}</td>
+					<tr class="hover:bg-slate-50 {!p.activo ? 'opacity-50' : ''}">
+						<td class="px-4 py-3 font-mono text-xs text-slate-500">{p.sku}</td>
+						<td class="px-4 py-3 font-medium text-slate-800">{p.nombre}</td>
+						<td class="px-4 py-3 text-slate-600">{p.categoria || '—'}</td>
+						<td class="px-4 py-3 text-slate-600">{p.unidad}</td>
+						<td class="px-4 py-3 text-right text-slate-800 font-medium">{p.stockFisico}</td>
 						<td class="px-4 py-3 text-right text-orange-600">{p.stockReservado}</td>
 						<td class="px-4 py-3 text-right font-bold {p.stockDisponible === 0 ? 'text-red-600' : p.stockDisponible <= p.stockMinimo ? 'text-yellow-600' : 'text-green-700'}">{p.stockDisponible}</td>
-						<td class="px-4 py-3 text-right text-gray-500">{p.stockMinimo}</td>
+						<td class="px-4 py-3 text-right text-slate-500">{p.stockMinimo}</td>
 						<td class="px-4 py-3">
-							<span class="px-2 py-0.5 rounded-full text-xs font-medium {b.clase}">{b.texto}</span>
+							<span class="px-2 py-0.5 rounded text-xs font-medium {b.clase}">{b.texto}</span>
 						</td>
-						<td class="px-4 py-3 text-gray-500 text-xs">
+						<td class="px-4 py-3 text-slate-500 text-xs">
 							{p.ultimoMovimiento ? fmtFecha(p.ultimoMovimiento.fecha) + ' · ' + p.ultimoMovimiento.tipo : '—'}
 						</td>
 						<td class="px-4 py-3 text-right">
@@ -273,13 +273,13 @@
 								<button onclick={() => abrirModal(p, 'DEVOLUCION')}
 									class="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200">Devolucion</button>
 								<button onclick={() => abrirHistorial(p)}
-									class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Historial</button>
+									class="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded hover:bg-slate-200">Historial</button>
 							</div>
 						</td>
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="11" class="px-4 py-8 text-center text-gray-500">No se encontraron productos.</td>
+						<td colspan="11" class="px-4 py-8 text-center text-slate-500">No se encontraron productos.</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -291,45 +291,45 @@
 {#if showModal && modalProducto}
 	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 		<div class="bg-white rounded-xl shadow-2xl w-full max-w-md">
-			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-				<h2 class="text-lg font-semibold text-gray-800">
+			<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+				<h2 class="text-lg font-semibold text-slate-800">
 					{modalTipo === 'ENTRADA' ? 'Registrar entrada' : modalTipo === 'AJUSTE' ? 'Registrar ajuste' : 'Registrar devolucion'}
 				</h2>
-				<button onclick={() => (showModal = false)} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+				<button onclick={() => (showModal = false)} class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
 			</div>
 			<form method="POST" action="?/movimiento" use:enhance={enhanceHandler} class="px-6 py-5 space-y-4">
 				<input type="hidden" name="productoId" value={modalProducto.id} />
 				<input type="hidden" name="tipo" value={modalTipo} />
-				<div class="bg-gray-50 rounded-lg p-3 space-y-1">
-					<p class="text-sm font-medium text-gray-800">{modalProducto.nombre}</p>
-					<p class="text-xs text-gray-500">{modalProducto.sku} · {modalProducto.unidad}</p>
+				<div class="bg-slate-50 rounded-lg p-3 space-y-1">
+					<p class="text-sm font-medium text-slate-800">{modalProducto.nombre}</p>
+					<p class="text-xs text-slate-500">{modalProducto.sku} · {modalProducto.unidad}</p>
 					<div class="flex gap-4 mt-2 text-xs">
-						<span class="text-gray-600">Fisico: <strong>{modalProducto.stockFisico}</strong></span>
+						<span class="text-slate-600">Fisico: <strong>{modalProducto.stockFisico}</strong></span>
 						<span class="text-orange-600">Reservado: <strong>{modalProducto.stockReservado}</strong></span>
 						<span class="text-green-700">Disponible: <strong>{modalProducto.stockDisponible}</strong></span>
 					</div>
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">
+					<label class="block text-sm font-medium text-slate-700 mb-1">
 						{modalTipo === 'AJUSTE' ? 'Nuevo stock fisico' : 'Cantidad'}
 					</label>
 					<input type="number" name="cantidad" bind:value={cantidad} min={modalTipo === 'AJUSTE' ? 0 : 1} step="1" required
-						class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+						class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
 					{#if modalTipo !== 'AJUSTE'}
-						<p class="text-xs text-gray-500 mt-1">Nuevo stock: <strong>{modalProducto.stockFisico + cantidad}</strong></p>
+						<p class="text-xs text-slate-500 mt-1">Nuevo stock: <strong>{modalProducto.stockFisico + cantidad}</strong></p>
 					{:else}
-						<p class="text-xs text-gray-500 mt-1">El stock fisico quedara en: <strong>{cantidad}</strong></p>
+						<p class="text-xs text-slate-500 mt-1">El stock fisico quedara en: <strong>{cantidad}</strong></p>
 					{/if}
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Observaciones</label>
+					<label class="block text-sm font-medium text-slate-700 mb-1">Observaciones</label>
 					<textarea name="observaciones" bind:value={observaciones} rows="2"
-						class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						placeholder="Motivo del movimiento..."></textarea>
 				</div>
 				<div class="flex justify-end gap-3">
 					<button type="button" onclick={() => (showModal = false)}
-						class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Cancelar</button>
+						class="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50">Cancelar</button>
 					<button type="submit"
 						class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700">Registrar</button>
 				</div>
@@ -342,22 +342,22 @@
 {#if showHistorial && historialProducto}
 	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 		<div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
+			<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
 				<div>
-					<h2 class="text-lg font-semibold text-gray-800">Historial de movimientos</h2>
-					<p class="text-sm text-gray-500 mt-0.5">{historialProducto.nombre} · <span class="font-mono text-xs">{historialProducto.sku}</span></p>
+					<h2 class="text-lg font-semibold text-slate-800">Historial de movimientos</h2>
+					<p class="text-sm text-slate-500 mt-0.5">{historialProducto.nombre} · <span class="font-mono text-xs">{historialProducto.sku}</span></p>
 				</div>
-				<button onclick={() => (showHistorial = false)} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+				<button onclick={() => (showHistorial = false)} class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
 			</div>
 
 			<div class="overflow-y-auto flex-1">
 				{#if historialCargando}
-					<div class="flex items-center justify-center py-16 text-gray-400 text-sm">Cargando...</div>
+					<div class="flex items-center justify-center py-16 text-slate-400 text-sm">Cargando...</div>
 				{:else if !Array.isArray(historialMovimientos) || historialMovimientos.length === 0}
-					<div class="flex items-center justify-center py-16 text-gray-400 text-sm">Sin movimientos registrados.</div>
+					<div class="flex items-center justify-center py-16 text-slate-400 text-sm">Sin movimientos registrados.</div>
 				{:else}
 					<table class="min-w-full text-sm">
-						<thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider sticky top-0">
+						<thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider sticky top-0">
 							<tr>
 								<th class="px-4 py-3 text-left">Fecha</th>
 								<th class="px-4 py-3 text-left">Movimiento</th>
@@ -369,19 +369,19 @@
 								<th class="px-4 py-3 text-left">Observaciones</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-100">
+						<tbody class="divide-y divide-slate-100">
 							{#each historialMovimientos as m}
-								<tr class="hover:bg-gray-50">
-									<td class="px-4 py-3 text-gray-600 whitespace-nowrap">{fmtFechaHora(m.fecha)}</td>
+								<tr class="hover:bg-slate-50">
+									<td class="px-4 py-3 text-slate-600 whitespace-nowrap">{fmtFechaHora(m.fecha)}</td>
 									<td class="px-4 py-3">
-										<span class="px-2 py-0.5 rounded-full text-xs font-medium {badgeTipo(m.tipo)}">{m.tipo}</span>
+										<span class="px-2 py-0.5 rounded text-xs font-medium {badgeTipo(m.tipo)}">{m.tipo}</span>
 									</td>
-									<td class="px-4 py-3 text-right font-medium text-gray-800">{m.cantidad}</td>
-									<td class="px-4 py-3 text-right text-gray-500">{m.stockAnterior}</td>
-									<td class="px-4 py-3 text-right font-medium {m.stockNuevo > m.stockAnterior ? 'text-green-700' : m.stockNuevo < m.stockAnterior ? 'text-red-600' : 'text-gray-700'}">{m.stockNuevo}</td>
-									<td class="px-4 py-3 text-gray-600">{m.usuario || '—'}</td>
-									<td class="px-4 py-3 text-gray-500 font-mono text-xs">{m.referencia || '—'}</td>
-									<td class="px-4 py-3 text-gray-500 whitespace-normal break-words max-w-sm">{m.observaciones || '—'}</td>
+									<td class="px-4 py-3 text-right font-medium text-slate-800">{m.cantidad}</td>
+									<td class="px-4 py-3 text-right text-slate-500">{m.stockAnterior}</td>
+									<td class="px-4 py-3 text-right font-medium {m.stockNuevo > m.stockAnterior ? 'text-green-700' : m.stockNuevo < m.stockAnterior ? 'text-red-600' : 'text-slate-700'}">{m.stockNuevo}</td>
+									<td class="px-4 py-3 text-slate-600">{m.usuario || '—'}</td>
+									<td class="px-4 py-3 text-slate-500 font-mono text-xs">{m.referencia || '—'}</td>
+									<td class="px-4 py-3 text-slate-500 whitespace-normal break-words max-w-sm">{m.observaciones || '—'}</td>
 								</tr>
 							{/each}
 						</tbody>
@@ -389,9 +389,9 @@
 				{/if}
 			</div>
 
-			<div class="px-6 py-4 border-t border-gray-100 shrink-0 flex justify-end">
+			<div class="px-6 py-4 border-t border-slate-100 shrink-0 flex justify-end">
 				<button onclick={() => (showHistorial = false)}
-					class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Cerrar</button>
+					class="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50">Cerrar</button>
 			</div>
 		</div>
 	</div>
@@ -401,19 +401,19 @@
 {#if showExport}
 	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
 		<div class="bg-white rounded-xl shadow-2xl w-full max-w-xl my-4">
-			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-				<h2 class="text-lg font-semibold text-gray-800">Exportar inventario</h2>
-				<button onclick={() => { showExport = false; }} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+			<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+				<h2 class="text-lg font-semibold text-slate-800">Exportar inventario</h2>
+				<button onclick={() => { showExport = false; }} class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
 			</div>
 
 			<div class="px-6 py-5 space-y-5">
 				<!-- Filtros rápidos -->
 				<div>
-					<p class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Periodo rápido</p>
+					<p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Periodo rápido</p>
 					<div class="flex flex-wrap gap-2">
 						{#each [['hoy','Hoy'],['ayer','Ayer'],['semana','Esta semana'],['mes','Este mes'],['mes_ant','Mes anterior'],['d30','Últimos 30 días'],['d90','Últimos 90 días'],['anio','Este año']] as [key, label]}
 							<button type="button" onclick={() => aplicarAtajo(key)}
-								class="px-3 py-1 text-xs border border-gray-300 rounded-full hover:bg-indigo-50 hover:border-indigo-400 hover:text-indigo-700 transition">
+								class="px-3 py-1 text-xs border border-slate-300 rounded hover:bg-indigo-50 hover:border-indigo-400 hover:text-indigo-700 transition">
 								{label}
 							</button>
 						{/each}
@@ -423,22 +423,22 @@
 				<!-- Rango de fechas -->
 				<div class="grid grid-cols-2 gap-4">
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Fecha inicial <span class="text-red-500">*</span></label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Fecha inicial <span class="text-red-500">*</span></label>
 						<input type="date" bind:value={expFechaInicio} max={hoy}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Fecha final <span class="text-red-500">*</span></label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Fecha final <span class="text-red-500">*</span></label>
 						<input type="date" bind:value={expFechaFin} max={hoy}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
 					</div>
 				</div>
 
 				<!-- Filtros adicionales -->
 				<div class="grid grid-cols-2 gap-4">
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Tipo de movimiento</label>
-						<select bind:value={expTipo} class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+						<label class="block text-sm font-medium text-slate-700 mb-1">Tipo de movimiento</label>
+						<select bind:value={expTipo} class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
 							<option value="">Todos</option>
 							<option value="ENTRADA">Entrada</option>
 							<option value="SALIDA">Salida</option>
@@ -448,8 +448,8 @@
 						</select>
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Estado del inventario</label>
-						<select bind:value={expEstado} class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+						<label class="block text-sm font-medium text-slate-700 mb-1">Estado del inventario</label>
+						<select bind:value={expEstado} class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
 							<option value="">Todos</option>
 							<option value="disponible">Disponible</option>
 							<option value="bajo">Stock bajo</option>
@@ -457,8 +457,8 @@
 						</select>
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Producto</label>
-						<select bind:value={expProductoId} class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+						<label class="block text-sm font-medium text-slate-700 mb-1">Producto</label>
+						<select bind:value={expProductoId} class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
 							<option value="">Todos los productos</option>
 							{#each data.inventario as p}
 								<option value={p.id}>{p.nombre} ({p.sku})</option>
@@ -466,8 +466,8 @@
 						</select>
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-						<select bind:value={expCategoria} class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+						<label class="block text-sm font-medium text-slate-700 mb-1">Categoría</label>
+						<select bind:value={expCategoria} class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
 							<option value="">Todas</option>
 							{#each categorias as cat}
 								<option value={cat}>{cat}</option>
@@ -475,9 +475,9 @@
 						</select>
 					</div>
 					<div class="col-span-2">
-						<label class="block text-sm font-medium text-gray-700 mb-1">Usuario (contiene)</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Usuario (contiene)</label>
 						<input type="text" bind:value={expUsuario} placeholder="Nombre del usuario..."
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
 					</div>
 				</div>
 
@@ -487,9 +487,9 @@
 
 				<div class="flex justify-end gap-3 pt-1">
 					<button type="button" onclick={() => { showExport = false; }}
-						class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">Cancelar</button>
+						class="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50">Cancelar</button>
 					<button type="button" onclick={() => exportar('csv')} disabled={expCargando}
-						class="px-4 py-2 bg-gray-700 text-white rounded-lg text-sm hover:bg-gray-800 disabled:opacity-50">
+						class="px-4 py-2 bg-slate-700 text-white rounded-lg text-sm hover:bg-slate-800 disabled:opacity-50">
 						{expCargando ? 'Generando...' : 'Descargar CSV'}
 					</button>
 					<button type="button" onclick={() => exportar('xlsx')} disabled={expCargando}

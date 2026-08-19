@@ -21,34 +21,34 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-		<h1 class="text-2xl font-bold text-gray-800">Cobranza</h1>
+		<h1 class="text-2xl font-bold text-slate-800">Cobranza</h1>
 		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/cobranza/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				CSV
 			</a>
 			<a
 				href="/api/cobranza/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Excel
 			</a>
 			<a
 				href="/api/cobranza/recordatorios/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Recordatorios CSV
 			</a>
 			<a
 				href="/api/cobranza/recordatorios/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Recordatorios Excel
 			</a>
 			<div class="bg-white rounded-lg shadow px-4 py-3">
-				<p class="text-xs text-gray-500">Cartera pendiente total</p>
+				<p class="text-xs text-slate-500">Cartera pendiente total</p>
 				<p class="text-xl font-bold text-red-700">{formatearMoneda(data.carteraPendiente)}</p>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 
 	<div class="bg-white rounded-lg shadow overflow-x-auto">
 		<table class="w-full min-w-[900px] text-left text-sm">
-			<thead class="bg-gray-50 text-gray-600">
+			<thead class="bg-slate-50 text-slate-600">
 				<tr>
 					<th class="px-6 py-3">Cliente</th>
 					<th class="px-6 py-3">Cotización</th>
@@ -76,21 +76,21 @@
 					<th class="px-6 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each data.pendientes as cot}
 					<tr class="{colorFila(cot.diasTranscurridos)}">
-						<td class="px-6 py-4 font-medium text-gray-800">{cot.cliente.nombre}</td>
+						<td class="px-6 py-4 font-medium text-slate-800">{cot.cliente.nombre}</td>
 						<td class="px-6 py-4 text-indigo-600">
 							<a href="/cotizaciones/{cot.id}" class="hover:underline">{cot.numero}</a>
 						</td>
-						<td class="px-6 py-4 text-gray-600">{formatearFecha(cot.fecha)}</td>
-						<td class="px-6 py-4 text-right text-gray-800">{formatearMoneda(Number(cot.total))}</td>
+						<td class="px-6 py-4 text-slate-600">{formatearFecha(cot.fecha)}</td>
+						<td class="px-6 py-4 text-right text-slate-800">{formatearMoneda(Number(cot.total))}</td>
 						<td class="px-6 py-4 text-right text-green-700">{formatearMoneda(cot.totalPagado)}</td>
 						<td class="px-6 py-4 text-right font-bold text-red-700">
 							{formatearMoneda(cot.saldoPendiente)}
 						</td>
 						<td class="px-6 py-4 text-center">
-							<span class="px-2 py-1 rounded-full text-xs font-medium
+							<span class="px-2 py-1 rounded text-xs font-medium
 								{cot.diasTranscurridos > 30 ? 'bg-red-200 text-red-800' : cot.diasTranscurridos > 15 ? 'bg-yellow-200 text-yellow-800' : 'bg-green-200 text-green-800'}">
 								{cot.diasTranscurridos}
 							</span>
@@ -121,7 +121,7 @@
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="8" class="px-6 py-8 text-center text-gray-500">
+						<td colspan="8" class="px-6 py-8 text-center text-slate-500">
 							No hay cotizaciones con saldo pendiente.
 						</td>
 					</tr>

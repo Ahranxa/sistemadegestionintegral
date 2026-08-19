@@ -11,7 +11,7 @@
 	let pagoAEliminar = $state(null);
 
 	const estados = {
-		BORRADOR: { label: 'Borrador', clase: 'bg-gray-100 text-gray-700' },
+		BORRADOR: { label: 'Borrador', clase: 'bg-slate-100 text-slate-700' },
 		ENVIADA: { label: 'Enviada', clase: 'bg-yellow-100 text-yellow-800' },
 		APROBADA: { label: 'Aprobada', clase: 'bg-green-100 text-green-800' },
 		RECHAZADA: { label: 'Rechazada', clase: 'bg-red-100 text-red-800' },
@@ -72,9 +72,9 @@
 <div class="space-y-6 max-w-5xl">
 	<div class="flex items-center justify-between">
 		<div>
-			<h1 class="text-2xl font-bold text-gray-800">{cot.numero}</h1>
-			<p class="text-gray-500">{cot.cliente.nombre}</p>
-			<p class="text-sm text-gray-400 mt-1">
+			<h1 class="text-2xl font-bold text-slate-800">{cot.numero}</h1>
+			<p class="text-slate-500">{cot.cliente.nombre}</p>
+			<p class="text-sm text-slate-400 mt-1">
 				Creado por {cot.creadoPorNombre || cot.creadoPorEmail || '—'} el {formatearFecha(cot.creadoEn)}
 			</p>
 		</div>
@@ -82,7 +82,7 @@
 	</div>
 
 	<div class="flex flex-wrap gap-3">
-		<span class="px-3 py-1 rounded-full text-sm font-medium {estados[cot.estado].clase}">
+		<span class="px-3 py-1 rounded text-sm font-medium {estados[cot.estado].clase}">
 			{estados[cot.estado].label}
 		</span>
 	</div>
@@ -97,9 +97,9 @@
 
 	<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 		<div class="bg-white rounded-lg shadow p-6 lg:col-span-2 overflow-x-auto">
-			<h2 class="text-lg font-semibold text-gray-800 mb-4">Conceptos</h2>
+			<h2 class="text-lg font-semibold text-slate-800 mb-4">Conceptos</h2>
 			<table class="w-full min-w-[400px] text-sm">
-				<thead class="bg-gray-50 text-gray-600">
+				<thead class="bg-slate-50 text-slate-600">
 					<tr>
 						<th class="px-4 py-2 text-left">Descripción</th>
 						<th class="px-4 py-2 text-right">Cantidad</th>
@@ -107,7 +107,7 @@
 						<th class="px-4 py-2 text-right">Subtotal</th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100">
+				<tbody class="divide-y divide-slate-100">
 					{#each cot.conceptos as concepto}
 						<tr>
 							<td class="px-4 py-3">{concepto.descripcion}</td>
@@ -120,27 +120,27 @@
 			</table>
 
 			<div class="mt-4 text-right space-y-1">
-				<p class="text-sm text-gray-600">Subtotal: {formatearMoneda(Number(cot.subtotal))}</p>
+				<p class="text-sm text-slate-600">Subtotal: {formatearMoneda(Number(cot.subtotal))}</p>
 				{#each cot.impuestos as imp}
-					<p class="text-sm text-gray-600">{imp.nombre}: {formatearMoneda(Number(imp.monto))}</p>
+					<p class="text-sm text-slate-600">{imp.nombre}: {formatearMoneda(Number(imp.monto))}</p>
 				{/each}
-				<p class="text-xl font-bold text-gray-800">Total: {formatearMoneda(Number(cot.total))}</p>
+				<p class="text-xl font-bold text-slate-800">Total: {formatearMoneda(Number(cot.total))}</p>
 			</div>
 		</div>
 
 		<div class="space-y-4">
 			<div class="bg-white rounded-lg shadow p-6">
-				<p class="text-gray-500 text-sm">Total pagado</p>
+				<p class="text-slate-500 text-sm">Total pagado</p>
 				<p class="text-2xl font-bold text-green-700">{formatearMoneda(data.totalPagado)}</p>
 			</div>
 			<div class="bg-white rounded-lg shadow p-6">
-				<p class="text-gray-500 text-sm">Saldo pendiente</p>
+				<p class="text-slate-500 text-sm">Saldo pendiente</p>
 				<p class="text-2xl font-bold text-red-700">{formatearMoneda(data.saldoPendiente)}</p>
 			</div>
 
 			{#if transiciones[cot.estado].length > 0}
 				<div class="bg-white rounded-lg shadow p-6 space-y-2">
-					<h3 class="text-sm font-semibold text-gray-700 mb-2">Cambiar estado</h3>
+					<h3 class="text-sm font-semibold text-slate-700 mb-2">Cambiar estado</h3>
 					{#each transiciones[cot.estado] as trans}
 						<form
 							method="POST"
@@ -209,24 +209,24 @@
 	{#if cot.pagos.length > 0}
 		<div class="bg-white rounded-lg shadow overflow-x-auto">
 			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
-				<h2 class="text-lg font-semibold text-gray-800">Pagos registrados</h2>
+				<h2 class="text-lg font-semibold text-slate-800">Pagos registrados</h2>
 				<div class="flex items-center gap-2">
 					<a
 						href="/api/pagos/exportar?formato=csv&cotizacionId={cot.id}"
-						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+						class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition"
 					>
 						CSV
 					</a>
 					<a
 						href="/api/pagos/exportar?formato=xlsx&cotizacionId={cot.id}"
-						class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+						class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition"
 					>
 						Excel
 					</a>
 				</div>
 			</div>
 			<table class="w-full min-w-[700px] text-sm mt-4">
-				<thead class="bg-gray-50 text-gray-600">
+				<thead class="bg-slate-50 text-slate-600">
 					<tr>
 						<th class="px-6 py-3">Fecha</th>
 						<th class="px-6 py-3">Método</th>
@@ -236,7 +236,7 @@
 						<th class="px-6 py-3"></th>
 					</tr>
 				</thead>
-				<tbody class="divide-y divide-gray-100">
+				<tbody class="divide-y divide-slate-100">
 					{#each cot.pagos as pago}
 						<tr>
 							<td class="px-6 py-4">{formatearFecha(pago.fecha)}</td>
@@ -260,9 +260,9 @@
 				</tbody>
 			</table>
 
-			<div class="border-t border-gray-100 p-6 text-right space-y-1">
-				<p class="text-sm text-gray-600">Total: {formatearMoneda(Number(cot.total))}</p>
-				<p class="text-sm text-gray-600">Pagado: {formatearMoneda(data.totalPagado)}</p>
+			<div class="border-t border-slate-100 p-6 text-right space-y-1">
+				<p class="text-sm text-slate-600">Total: {formatearMoneda(Number(cot.total))}</p>
+				<p class="text-sm text-slate-600">Pagado: {formatearMoneda(data.totalPagado)}</p>
 				<p class="text-lg font-bold {colorSaldo(data.saldoPendiente)}">
 					Pendiente: {formatearMoneda(data.saldoPendiente)}
 				</p>
@@ -272,24 +272,24 @@
 
 	<div class="bg-white rounded-lg shadow overflow-x-auto">
 		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 pb-0 gap-3">
-			<h2 class="text-lg font-semibold text-gray-800">Historial de estados</h2>
+			<h2 class="text-lg font-semibold text-slate-800">Historial de estados</h2>
 			<div class="flex items-center gap-2">
 				<a
 					href="/api/cotizaciones/historial/exportar?formato=csv&cotizacionId={cot.id}"
-					class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition"
 				>
 					CSV
 				</a>
 				<a
 					href="/api/cotizaciones/historial/exportar?formato=xlsx&cotizacionId={cot.id}"
-					class="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50 transition"
+					class="text-xs bg-white border border-slate-300 text-slate-700 px-3 py-1.5 rounded hover:bg-slate-50 transition"
 				>
 					Excel
 				</a>
 			</div>
 		</div>
 		<table class="w-full min-w-[500px] text-sm mt-4">
-			<thead class="bg-gray-50 text-gray-600">
+			<thead class="bg-slate-50 text-slate-600">
 				<tr>
 					<th class="px-6 py-3">Fecha</th>
 					<th class="px-6 py-3">Estado anterior</th>
@@ -297,13 +297,13 @@
 					<th class="px-6 py-3">Usuario</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each cot.historial as h}
 					<tr>
 						<td class="px-6 py-4">{formatearHora(h.creadoEn)}</td>
 						<td class="px-6 py-4">{h.estadoAnterior ? estados[h.estadoAnterior].label : '-'}</td>
 						<td class="px-6 py-4">
-							<span class="px-2 py-1 rounded-full text-xs font-medium {estados[h.estadoNuevo].clase}">
+							<span class="px-2 py-1 rounded text-xs font-medium {estados[h.estadoNuevo].clase}">
 								{estados[h.estadoNuevo].label}
 							</span>
 						</td>
@@ -311,7 +311,7 @@
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="4" class="px-6 py-8 text-center text-gray-500">Sin historial</td>
+						<td colspan="4" class="px-6 py-8 text-center text-slate-500">Sin historial</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -322,7 +322,7 @@
 {#if showPago}
 	<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 		<div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-			<h2 class="text-xl font-bold text-gray-800 mb-4">Registrar pago</h2>
+			<h2 class="text-xl font-bold text-slate-800 mb-4">Registrar pago</h2>
 			<form
 				method="POST"
 				action="?/registrarPago"
@@ -338,7 +338,7 @@
 				class="space-y-4"
 			>
 				<div>
-					<label for="monto" class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+					<label for="monto" class="block text-sm font-medium text-slate-700 mb-1">Monto</label>
 					<input
 						id="monto"
 						type="number"
@@ -347,28 +347,28 @@
 						step="0.01"
 						max={data.saldoPendiente}
 						required
-						class="w-full border border-gray-300 rounded-lg px-3 py-2"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2"
 					/>
 				</div>
 
 				<div>
-					<label for="fecha" class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+					<label for="fecha" class="block text-sm font-medium text-slate-700 mb-1">Fecha</label>
 					<input
 						id="fecha"
 						type="date"
 						name="fecha"
 						value={new Date().toISOString().split('T')[0]}
-						class="w-full border border-gray-300 rounded-lg px-3 py-2"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2"
 					/>
 				</div>
 
 				<div>
-					<label for="metodo" class="block text-sm font-medium text-gray-700 mb-1">Método</label>
+					<label for="metodo" class="block text-sm font-medium text-slate-700 mb-1">Método</label>
 					<select
 						id="metodo"
 						name="metodo"
 						required
-						class="w-full border border-gray-300 rounded-lg px-3 py-2"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2"
 					>
 						<option value="">Selecciona</option>
 						{#each Object.entries(metodosPago) as [key, label]}
@@ -378,12 +378,12 @@
 				</div>
 
 				<div>
-					<label for="referencia" class="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
+					<label for="referencia" class="block text-sm font-medium text-slate-700 mb-1">Referencia</label>
 					<input
 						id="referencia"
 						type="text"
 						name="referencia"
-						class="w-full border border-gray-300 rounded-lg px-3 py-2"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2"
 					/>
 				</div>
 
@@ -391,7 +391,7 @@
 					<button
 						type="button"
 						onclick={() => (showPago = false)}
-						class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
+						class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50"
 					>
 						Cancelar
 					</button>
@@ -410,8 +410,8 @@
 {#if showConfirmDelete && pagoAEliminar}
 	<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 		<div class="bg-white rounded-xl shadow-xl w-full max-w-sm p-6">
-			<h2 class="text-xl font-bold text-gray-800 mb-2">¿Eliminar pago?</h2>
-			<p class="text-gray-600 mb-6">
+			<h2 class="text-xl font-bold text-slate-800 mb-2">¿Eliminar pago?</h2>
+			<p class="text-slate-600 mb-6">
 				Se eliminará el pago de {formatearMoneda(Number(pagoAEliminar.monto))} realizado el {formatearFecha(pagoAEliminar.fecha)}.
 			</p>
 			<form
@@ -432,7 +432,7 @@
 				<button
 					type="button"
 					onclick={cerrarEliminar}
-					class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
+					class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50"
 				>
 					Cancelar
 				</button>

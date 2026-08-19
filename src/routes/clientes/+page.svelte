@@ -54,17 +54,17 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-		<h1 class="text-2xl font-bold text-gray-800">Clientes</h1>
+		<h1 class="text-2xl font-bold text-slate-800">Clientes</h1>
 		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/clientes/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				CSV
 			</a>
 			<a
 				href="/api/clientes/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Excel
 			</a>
@@ -93,13 +93,13 @@
 			type="text"
 			bind:value={busqueda}
 			placeholder="Buscar por nombre, empresa o RFC..."
-			class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			class="w-full border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 		/>
 	</div>
 
 	<div class="bg-white rounded-lg shadow overflow-hidden overflow-x-auto">
 		<table class="min-w-full text-left text-sm whitespace-nowrap">
-			<thead class="bg-gray-50 text-gray-600">
+			<thead class="bg-slate-50 text-slate-600">
 				<tr>
 					<th class="px-6 py-3">Nombre</th>
 					<th class="px-6 py-3">Empresa</th>
@@ -111,17 +111,17 @@
 					<th class="px-6 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each paginados as cliente}
-					<tr class="hover:bg-gray-50 {!cliente.activo ? 'opacity-60' : ''}">
-						<td class="px-6 py-4 font-medium text-gray-800">{cliente.nombre}</td>
-						<td class="px-6 py-4 text-gray-600">{cliente.empresa || '-'}</td>
-						<td class="px-6 py-4 text-gray-600">{cliente.rfc || '-'}</td>
-						<td class="px-6 py-4 text-gray-600">{cliente.correo}</td>
-						<td class="px-6 py-4 text-gray-600">{cliente.telefono || '-'}</td>
-						<td class="px-6 py-4 text-gray-600">{formatearFecha(cliente.creadoEn)}</td>
+					<tr class="hover:bg-slate-50 {!cliente.activo ? 'opacity-60' : ''}">
+						<td class="px-6 py-4 font-medium text-slate-800">{cliente.nombre}</td>
+						<td class="px-6 py-4 text-slate-600">{cliente.empresa || '-'}</td>
+						<td class="px-6 py-4 text-slate-600">{cliente.rfc || '-'}</td>
+						<td class="px-6 py-4 text-slate-600">{cliente.correo}</td>
+						<td class="px-6 py-4 text-slate-600">{cliente.telefono || '-'}</td>
+						<td class="px-6 py-4 text-slate-600">{formatearFecha(cliente.creadoEn)}</td>
 						<td class="px-6 py-4">
-							<span class="px-2 py-0.5 rounded-full text-xs font-medium {cliente.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+							<span class="px-2 py-0.5 rounded text-xs font-medium {cliente.activo ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">
 								{cliente.activo ? 'Activo' : 'Inactivo'}
 							</span>
 						</td>
@@ -164,7 +164,7 @@
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="8" class="px-6 py-8 text-center text-gray-500">
+						<td colspan="8" class="px-6 py-8 text-center text-slate-500">
 							No se encontraron clientes.
 						</td>
 					</tr>
@@ -178,15 +178,15 @@
 			<button
 				disabled={pagina === 1}
 				onclick={() => pagina--}
-				class="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+				class="px-4 py-2 rounded-lg border border-slate-300 disabled:opacity-50 hover:bg-slate-50"
 			>
 				Anterior
 			</button>
-			<span class="text-gray-600">Página {pagina} de {totalPaginas}</span>
+			<span class="text-slate-600">Página {pagina} de {totalPaginas}</span>
 			<button
 				disabled={pagina === totalPaginas}
 				onclick={() => pagina++}
-				class="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+				class="px-4 py-2 rounded-lg border border-slate-300 disabled:opacity-50 hover:bg-slate-50"
 			>
 				Siguiente
 			</button>
@@ -198,7 +198,7 @@
 	<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 		<div class="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
 			<div class="p-6">
-				<h2 class="text-xl font-bold text-gray-800 mb-4">
+				<h2 class="text-xl font-bold text-slate-800 mb-4">
 					{modoEdicion ? 'Editar cliente' : 'Nuevo cliente'}
 				</h2>
 
@@ -221,13 +221,13 @@
 					{/if}
 
 					<div>
-						<label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+						<label for="nombre" class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label>
 						<input
 							id="nombre"
 							type="text"
 							name="nombre"
 							value={clienteEditando?.nombre || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 						{#if form?.errors?.nombre}
 							<p class="text-red-600 text-sm mt-1">{form.errors.nombre}</p>
@@ -235,24 +235,24 @@
 					</div>
 
 					<div>
-						<label for="empresa" class="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
+						<label for="empresa" class="block text-sm font-medium text-slate-700 mb-1">Empresa</label>
 						<input
 							id="empresa"
 							type="text"
 							name="empresa"
 							value={clienteEditando?.empresa || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 					</div>
 
 					<div>
-						<label for="rfc" class="block text-sm font-medium text-gray-700 mb-1">RFC</label>
+						<label for="rfc" class="block text-sm font-medium text-slate-700 mb-1">RFC</label>
 						<input
 							id="rfc"
 							type="text"
 							name="rfc"
 							value={clienteEditando?.rfc || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 						{#if form?.errors?.rfc}
 							<p class="text-red-600 text-sm mt-1">{form.errors.rfc}</p>
@@ -260,13 +260,13 @@
 					</div>
 
 					<div>
-						<label for="correo" class="block text-sm font-medium text-gray-700 mb-1">Correo *</label>
+						<label for="correo" class="block text-sm font-medium text-slate-700 mb-1">Correo *</label>
 						<input
 							id="correo"
 							type="email"
 							name="correo"
 							value={clienteEditando?.correo || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 						{#if form?.errors?.correo}
 							<p class="text-red-600 text-sm mt-1">{form.errors.correo}</p>
@@ -274,35 +274,35 @@
 					</div>
 
 					<div>
-						<label for="telefono" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+						<label for="telefono" class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
 						<input
 							id="telefono"
 							type="text"
 							name="telefono"
 							value={clienteEditando?.telefono || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 					</div>
 
 					<div>
-						<label for="direccion" class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+						<label for="direccion" class="block text-sm font-medium text-slate-700 mb-1">Dirección</label>
 						<input
 							id="direccion"
 							type="text"
 							name="direccion"
 							value={clienteEditando?.direccion || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						/>
 					</div>
 
 					<div>
-						<label for="notas" class="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+						<label for="notas" class="block text-sm font-medium text-slate-700 mb-1">Notas</label>
 						<textarea
 							id="notas"
 							name="notas"
 							rows="3"
 							value={clienteEditando?.notas || ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2"
 						></textarea>
 					</div>
 
@@ -310,7 +310,7 @@
 						<button
 							type="button"
 							onclick={cerrarModal}
-							class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
+							class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50"
 						>
 							Cancelar
 						</button>

@@ -76,7 +76,7 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-		<h1 class="text-2xl font-bold text-gray-800">Catálogo de Productos</h1>
+		<h1 class="text-2xl font-bold text-slate-800">Catálogo de Productos</h1>
 		<button
 			onclick={abrirCrear}
 			class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium"
@@ -95,11 +95,11 @@
 			type="text"
 			bind:value={busqueda}
 			placeholder="Buscar por nombre, SKU o categoría..."
-			class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+			class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm"
 		/>
 		<select
 			bind:value={filtroEstado}
-			class="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+			class="border border-slate-300 rounded-lg px-3 py-2 text-sm"
 		>
 			<option value="todos">Todos</option>
 			<option value="activos">Activos</option>
@@ -110,7 +110,7 @@
 	<!-- Tabla -->
 	<div class="bg-white rounded-lg shadow overflow-hidden overflow-x-auto">
 		<table class="min-w-full text-left text-sm whitespace-nowrap">
-			<thead class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+			<thead class="bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
 				<tr>
 					<th class="px-4 py-3">SKU</th>
 					<th class="px-4 py-3">Nombre</th>
@@ -124,25 +124,25 @@
 					<th class="px-4 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each paginados as p}
-					<tr class="hover:bg-gray-50 {!p.activo ? 'opacity-60' : ''}">
-						<td class="px-4 py-3 font-mono text-xs text-gray-500">{p.sku}</td>
-						<td class="px-4 py-3 font-medium text-gray-800">{p.nombre}</td>
-						<td class="px-4 py-3 text-gray-600">{p.categoria || '-'}</td>
+					<tr class="hover:bg-slate-50 {!p.activo ? 'opacity-60' : ''}">
+						<td class="px-4 py-3 font-mono text-xs text-slate-500">{p.sku}</td>
+						<td class="px-4 py-3 font-medium text-slate-800">{p.nombre}</td>
+						<td class="px-4 py-3 text-slate-600">{p.categoria || '-'}</td>
 						<td class="px-4 py-3">
-							<span class="px-2 py-0.5 rounded-full text-xs font-medium {p.tipo === 'SERVICIO' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">
+							<span class="px-2 py-0.5 rounded text-xs font-medium {p.tipo === 'SERVICIO' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">
 								{p.tipo === 'SERVICIO' ? 'Servicio' : 'Producto'}
 							</span>
 						</td>
-						<td class="px-4 py-3 text-gray-600">{p.unidad}</td>
-						<td class="px-4 py-3 text-right text-gray-800">{formatearMoneda(Number(p.precioBase))}</td>
-						<td class="px-4 py-3 text-right text-gray-600">{Number(p.ivaPct)}%</td>
-						<td class="px-4 py-3 text-right {Number(p.stockFisico) <= Number(p.stockMinimo) && p.tipo === 'PRODUCTO' ? 'text-red-600 font-semibold' : 'text-gray-600'}">
+						<td class="px-4 py-3 text-slate-600">{p.unidad}</td>
+						<td class="px-4 py-3 text-right text-slate-800">{formatearMoneda(Number(p.precioBase))}</td>
+						<td class="px-4 py-3 text-right text-slate-600">{Number(p.ivaPct)}%</td>
+						<td class="px-4 py-3 text-right {Number(p.stockFisico) <= Number(p.stockMinimo) && p.tipo === 'PRODUCTO' ? 'text-red-600 font-semibold' : 'text-slate-600'}">
 							{p.tipo === 'SERVICIO' ? '—' : Number(p.stockFisico)}
 						</td>
 						<td class="px-4 py-3">
-							<span class="px-2 py-0.5 rounded-full text-xs font-medium {p.activo ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}">
+							<span class="px-2 py-0.5 rounded text-xs font-medium {p.activo ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}">
 								{p.activo ? 'Activo' : 'Inactivo'}
 							</span>
 						</td>
@@ -165,7 +165,7 @@
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="10" class="px-4 py-8 text-center text-gray-500">
+						<td colspan="10" class="px-4 py-8 text-center text-slate-500">
 							No se encontraron productos.
 						</td>
 					</tr>
@@ -177,7 +177,7 @@
 	<!-- Paginación -->
 	{#if totalPaginas > 1}
 		<div class="flex items-center justify-between bg-white rounded-lg shadow p-4">
-			<p class="text-sm text-gray-600">
+			<p class="text-sm text-slate-600">
 				{filtrados.length} producto{filtrados.length !== 1 ? 's' : ''}
 			</p>
 			<div class="flex items-center gap-2">
@@ -186,7 +186,7 @@
 					disabled={pagina === 1}
 					class="px-3 py-1 rounded border text-sm disabled:opacity-40"
 				>←</button>
-				<span class="text-sm text-gray-600">{pagina} / {totalPaginas}</span>
+				<span class="text-sm text-slate-600">{pagina} / {totalPaginas}</span>
 				<button
 					onclick={() => pagina++}
 					disabled={pagina === totalPaginas}
@@ -201,11 +201,11 @@
 {#if showModal}
 	<div class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
 		<div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-			<div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-				<h2 class="text-lg font-semibold text-gray-800">
+			<div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+				<h2 class="text-lg font-semibold text-slate-800">
 					{modoEdicion ? 'Editar producto' : 'Nuevo producto'}
 				</h2>
-				<button onclick={cerrarModal} class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+				<button onclick={cerrarModal} class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
 			</div>
 
 			<form
@@ -220,13 +220,13 @@
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">SKU *</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">SKU *</label>
 						<input
 							type="text"
 							name="sku"
 							value={productoEditando?.sku ?? ''}
 							required
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 							placeholder="Ej. PROD-001"
 						/>
 						{#if form?.errors?.sku}
@@ -235,32 +235,32 @@
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label>
 						<input
 							type="text"
 							name="nombre"
 							value={productoEditando?.nombre ?? ''}
 							required
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Categoría</label>
 						<input
 							type="text"
 							name="categoria"
 							value={productoEditando?.categoria ?? ''}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 							placeholder="Ej. Pintura, Mano de obra"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Tipo *</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Tipo *</label>
 						<select
 							name="tipo"
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						>
 							<option value="PRODUCTO" selected={!productoEditando || productoEditando.tipo === 'PRODUCTO'}>
 								Producto
@@ -272,18 +272,18 @@
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Unidad</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Unidad</label>
 						<input
 							type="text"
 							name="unidad"
 							value={productoEditando?.unidad ?? 'pza'}
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 							placeholder="Ej. pza, lt, m², hr"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Precio base (sin IVA) *</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Precio base (sin IVA) *</label>
 						<input
 							type="number"
 							name="precioBase"
@@ -291,53 +291,53 @@
 							min="0"
 							step="0.01"
 							required
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">IVA predeterminado (%)</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">IVA predeterminado (%)</label>
 						<input
 							type="number"
 							name="ivaPct"
 							value={productoEditando?.ivaPct !== undefined ? Number(productoEditando.ivaPct) : 16}
 							min="0"
 							step="0.01"
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Stock actual</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Stock actual</label>
 						<input
 							type="number"
 							name="stockFisico"
 							value={productoEditando?.stockFisico !== undefined ? Number(productoEditando.stockFisico) : 0}
 							min="0"
 							step="0.01"
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						/>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">Stock mínimo</label>
+						<label class="block text-sm font-medium text-slate-700 mb-1">Stock mínimo</label>
 						<input
 							type="number"
 							name="stockMinimo"
 							value={productoEditando?.stockMinimo !== undefined ? Number(productoEditando.stockMinimo) : 0}
 							min="0"
 							step="0.01"
-							class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+							class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						/>
 					</div>
 				</div>
 
 				<div>
-					<label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+					<label class="block text-sm font-medium text-slate-700 mb-1">Descripción</label>
 					<textarea
 						name="descripcion"
 						rows="2"
-						class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+						class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
 						placeholder="Descripción detallada del producto o servicio"
 					>{productoEditando?.descripcion ?? ''}</textarea>
 				</div>
@@ -346,7 +346,7 @@
 					<button
 						type="button"
 						onclick={cerrarModal}
-						class="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+						class="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50"
 					>
 						Cancelar
 					</button>

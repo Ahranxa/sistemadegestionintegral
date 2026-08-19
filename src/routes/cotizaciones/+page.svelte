@@ -5,7 +5,7 @@
 	let filtroCliente = $state('');
 
 	const estados = {
-		BORRADOR: { label: 'Borrador', clase: 'bg-gray-100 text-gray-700' },
+		BORRADOR: { label: 'Borrador', clase: 'bg-slate-100 text-slate-700' },
 		ENVIADA: { label: 'Enviada', clase: 'bg-yellow-100 text-yellow-800' },
 		APROBADA: { label: 'Aprobada', clase: 'bg-green-100 text-green-800' },
 		RECHAZADA: { label: 'Rechazada', clase: 'bg-red-100 text-red-800' },
@@ -32,29 +32,29 @@
 
 <div class="space-y-6">
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-		<h1 class="text-2xl font-bold text-gray-800">Cotizaciones</h1>
+		<h1 class="text-2xl font-bold text-slate-800">Cotizaciones</h1>
 		<div class="flex flex-wrap items-center gap-2">
 			<a
 				href="/api/cotizaciones/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Cotizaciones CSV
 			</a>
 			<a
 				href="/api/cotizaciones/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Cotizaciones Excel
 			</a>
 			<a
 				href="/api/cotizaciones/historial/exportar?formato=csv"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Historial CSV
 			</a>
 			<a
 				href="/api/cotizaciones/historial/exportar?formato=xlsx"
-				class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm"
+				class="bg-white border border-slate-300 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 transition text-sm"
 			>
 				Historial Excel
 			</a>
@@ -70,7 +70,7 @@
 	<div class="bg-white rounded-lg shadow p-4 flex flex-col md:flex-row gap-4">
 		<select
 			bind:value={filtroEstado}
-			class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			class="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 		>
 			<option value="">Todos los estados</option>
 			{#each Object.entries(estados) as [key, val]}
@@ -80,7 +80,7 @@
 
 		<select
 			bind:value={filtroCliente}
-			class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+			class="border border-slate-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
 		>
 			<option value="">Todos los clientes</option>
 			{#each data.clientes as cliente}
@@ -91,7 +91,7 @@
 
 	<div class="bg-white rounded-lg shadow overflow-x-auto">
 		<table class="w-full min-w-[800px] text-left text-sm">
-			<thead class="bg-gray-50 text-gray-600">
+			<thead class="bg-slate-50 text-slate-600">
 				<tr>
 					<th class="px-6 py-3">Número</th>
 					<th class="px-6 py-3">Cliente</th>
@@ -103,27 +103,27 @@
 					<th class="px-6 py-3 text-right">Acciones</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-100">
+			<tbody class="divide-y divide-slate-100">
 				{#each filtradas as cot}
-					<tr class="hover:bg-gray-50">
-						<td class="px-6 py-4 font-medium text-gray-800">{cot.numero}</td>
-						<td class="px-6 py-4 text-gray-600">{cot.cliente.nombre}</td>
-						<td class="px-6 py-4 text-gray-600">{formatearFecha(cot.fecha)}</td>
-						<td class="px-6 py-4 text-gray-600">{formatearFecha(cot.vencimiento)}</td>
-						<td class="px-6 py-4 text-gray-800">{formatearMoneda(Number(cot.total))}</td>
+					<tr class="hover:bg-slate-50">
+						<td class="px-6 py-4 font-medium text-slate-800">{cot.numero}</td>
+						<td class="px-6 py-4 text-slate-600">{cot.cliente.nombre}</td>
+						<td class="px-6 py-4 text-slate-600">{formatearFecha(cot.fecha)}</td>
+						<td class="px-6 py-4 text-slate-600">{formatearFecha(cot.vencimiento)}</td>
+						<td class="px-6 py-4 text-slate-800">{formatearMoneda(Number(cot.total))}</td>
 						<td class="px-6 py-4">
-							<span class="px-2 py-1 rounded-full text-xs font-medium {estados[cot.estado].clase}">
+							<span class="px-2 py-1 rounded text-xs font-medium {estados[cot.estado].clase}">
 								{estados[cot.estado].label}
 							</span>
 						</td>
-						<td class="px-6 py-4 text-gray-600 text-sm">{cot.creadoPorNombre}</td>
+						<td class="px-6 py-4 text-slate-600 text-sm">{cot.creadoPorNombre}</td>
 						<td class="px-6 py-4 text-right">
 							<a href="/cotizaciones/{cot.id}" class="text-indigo-600 hover:underline">Ver</a>
 						</td>
 					</tr>
 				{:else}
 					<tr>
-						<td colspan="8" class="px-6 py-8 text-center text-gray-500">
+						<td colspan="8" class="px-6 py-8 text-center text-slate-500">
 							No se encontraron cotizaciones.
 						</td>
 					</tr>
