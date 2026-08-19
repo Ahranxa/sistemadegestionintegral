@@ -24,6 +24,7 @@
 
 	let currentRoute = $derived($page.url.pathname);
 	let stopFn = null;
+	let cameraRef = null;
 	let listener = null;
 	let startTime = 0;
 	let lastSentEmotion = '';
@@ -119,9 +120,11 @@
 			await startSession();
 			await loadScript();
 			const moduleName = window.CY.modules().FACE_EMOTION.name;
+			cameraRef = window.CY.getUserMediaCameraFactory().createCamera();
 			const { start, stop } = await window.CY
 				.loader()
 				.licenseKey(licenseKey)
+				.source(cameraRef)
 				.addModule(moduleName, MORPHCAST_CONFIG)
 				.load();
 			stopFn = stop;
@@ -149,6 +152,10 @@
 		if (stopFn) {
 			stopFn();
 			stopFn = null;
+		}
+		if (cameraRef) {
+			cameraRef.stop();
+			cameraRef = null;
 		}
 		if (sessionId) {
 			try {
