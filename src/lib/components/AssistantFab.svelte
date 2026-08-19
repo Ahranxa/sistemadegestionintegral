@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { fly } from 'svelte/transition';
+	import { Sparkles, X, Send, Bot } from 'lucide-svelte';
 
 	let open = $state(false);
 	let message = $state('');
@@ -65,36 +66,39 @@
 
 <button
 	onclick={() => (open = !open)}
-	class="fixed bottom-4 right-4 z-50 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+	class="fixed bottom-4 right-4 z-50 flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/45 hover:scale-105 hover:-translate-y-0.5 active:scale-95 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all duration-200"
 	aria-label="Asistente"
 >
 	{#if open}
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-		</svg>
+		<X class="w-5 h-5 md:w-6 md:h-6" />
 	{:else}
-		<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-			<path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-		</svg>
+		<Bot class="w-5 h-5 md:w-6 md:h-6" />
 	{/if}
 </button>
 
 {#if open}
 	<div
 		transition:fly={{ y: 20, duration: 200 }}
-		class="fixed bottom-20 z-50 flex flex-col h-[70vh] max-h-[28rem] w-[calc(100vw-2rem)] max-w-sm rounded-xl border border-slate-200 bg-white shadow-xl md:w-96 md:right-4 md:left-auto md:max-w-none"
+		class="fixed bottom-20 z-50 flex flex-col h-[70vh] max-h-[28rem] w-[calc(100vw-2rem)] max-w-sm rounded-2xl border border-slate-200/60 bg-white shadow-2xl shadow-slate-900/10 md:w-96 md:right-4 md:left-auto md:max-w-none overflow-hidden"
 	>
-		<div class="border-b border-slate-100 bg-indigo-600 px-4 py-3 text-white rounded-t-xl">
+		<div class="bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3.5 text-white flex items-center gap-2">
+			<Sparkles class="w-4 h-4 text-indigo-200" />
 			<h3 class="font-semibold text-sm">Asistente GestorPyME</h3>
 		</div>
 
-		<div class="flex-1 space-y-3 overflow-y-auto p-4">
+		<div class="flex-1 space-y-3 overflow-y-auto p-4 bg-slate-50/50">
 			{#if messages.length === 0}
-				<p class="text-sm text-slate-500">¿En qué puedo ayudarte? Te oriento sobre GestorPyME.</p>
+				<div class="flex flex-col items-center justify-center h-full text-center p-4">
+					<div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mb-3">
+						<Bot class="w-6 h-6" />
+					</div>
+					<p class="text-sm text-slate-600 font-medium">¿En qué puedo ayudarte?</p>
+					<p class="text-xs text-slate-400 mt-1">Te oriento sobre GestorPyME.</p>
+				</div>
 			{:else}
 				{#each messages as msg, i (i)}
 					<div class="flex {msg.role === 'user' ? 'justify-end' : 'justify-start'}">
-						<div class="max-w-[85%] rounded-lg px-3 py-2 text-sm {msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-800'}">
+						<div class="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm {msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm shadow-sm'}">
 							{msg.text}
 						</div>
 					</div>
@@ -103,35 +107,35 @@
 
 			{#if loading}
 				<div class="flex justify-start">
-					<div class="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-800">
+					<div class="rounded-xl bg-white border border-slate-200 px-3.5 py-2.5 text-sm text-slate-800 shadow-sm">
 						<span class="animate-pulse">Pensando...</span>
 					</div>
 				</div>
 			{/if}
 
 			{#if error}
-				<div class="rounded-lg bg-rose-50 p-2 text-sm text-rose-700">
+				<div class="rounded-xl bg-rose-50 border border-rose-100 p-3 text-sm text-rose-700">
 					{error}
 				</div>
 			{/if}
 		</div>
 
-		<div class="border-t border-slate-100 p-3">
+		<div class="border-t border-slate-200 bg-white p-3">
 			<div class="flex gap-2">
 				<input
 					type="text"
 					bind:value={message}
 					onkeydown={onKeydown}
 					placeholder="Escribe tu pregunta..."
-					class="flex-1 rounded border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					class="flex-1 rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm bg-slate-50/50 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 transition"
 					disabled={loading}
 				/>
 				<button
 					onclick={send}
 					disabled={loading || !message.trim()}
-					class="rounded bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition"
+					class="rounded-xl bg-indigo-600 px-3.5 py-2.5 text-white hover:bg-indigo-700 disabled:opacity-50 shadow-sm hover:shadow transition"
 				>
-					Enviar
+					<Send class="w-4 h-4" />
 				</button>
 			</div>
 		</div>

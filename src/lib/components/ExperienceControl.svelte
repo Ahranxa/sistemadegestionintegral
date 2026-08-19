@@ -11,6 +11,7 @@
 		SAME_EMOTION_COOLDOWN_MS,
 		getModuleLabel
 	} from '$lib/morphcast/morphcastConfig.js';
+	import { Camera, ScanFace, Activity, Check, X, AlertCircle } from 'lucide-svelte';
 
 	let isAnalyzing = $state(false);
 	let showConsent = $state(false);
@@ -182,58 +183,69 @@
 {#if browser}
 	<div class="fixed bottom-4 left-4 md:left-72 z-30 flex flex-col gap-2">
 		{#if showConsent}
-			<div class="bg-white border border-slate-200 rounded shadow-md p-4 w-72">
-				<p class="text-sm text-slate-700 mb-3">
-					Se utilizará la cámara para analizar expresiones mediante MorphCast. Se almacenarán
-					resultados derivados de la sesión para analítica de experiencia. Puedes detener el
-					análisis en cualquier momento. No guardamos video ni imágenes.
+			<div class="bg-white border border-slate-200/80 rounded-2xl shadow-xl p-4 w-72">
+				<div class="flex items-center gap-2 mb-2 text-indigo-600">
+					<ScanFace class="w-5 h-5" />
+					<h3 class="text-sm font-semibold">Análisis de experiencia</h3>
+				</div>
+				<p class="text-sm text-slate-600 mb-4">
+					Se utilizará la cámara para analizar expresiones mediante MorphCast. No guardamos video ni imágenes.
 				</p>
 				<div class="flex gap-2">
 					<button
-						class="flex-1 bg-indigo-600 text-white text-sm font-medium px-3 py-2 rounded hover:bg-indigo-700 transition"
+						class="flex-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold px-3 py-2 rounded-lg hover:from-indigo-700 hover:to-violet-700 shadow-sm hover:shadow transition flex items-center justify-center gap-1.5"
 						onclick={startAnalysis}
 					>
+						<Check class="w-4 h-4" />
 						Aceptar
 					</button>
 					<button
-						class="flex-1 bg-slate-100 text-slate-700 text-sm font-medium px-3 py-2 rounded hover:bg-slate-200 transition"
+						class="flex-1 bg-slate-100 text-slate-700 text-sm font-semibold px-3 py-2 rounded-lg hover:bg-slate-200 transition flex items-center justify-center gap-1.5"
 						onclick={() => (showConsent = false)}
 					>
+						<X class="w-4 h-4" />
 						Cancelar
 					</button>
 				</div>
 			</div>
 		{:else if isAnalyzing}
-			<div class="bg-white border border-slate-200 rounded shadow-md p-3 w-72">
-				<div class="flex items-center gap-2 mb-2">
-					<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-					<span class="text-xs font-semibold text-indigo-700 uppercase tracking-wide">{statusText}</span>
+			<div class="bg-indigo-50 border border-indigo-200 rounded-2xl shadow-xl p-4 w-72">
+				<div class="flex items-center gap-2 mb-3">
+					<div class="w-7 h-7 rounded-full bg-emerald-500/15 flex items-center justify-center">
+						<Activity class="w-4 h-4 text-emerald-600 animate-pulse" />
+					</div>
+					<span class="text-xs font-bold text-indigo-700 uppercase tracking-wide">{statusText}</span>
 				</div>
 				<p class="text-sm text-slate-800">
-					Emoción: <span class="font-semibold">{currentEmotion}</span>
+					Emoción: <span class="font-bold text-indigo-700">{currentEmotion}</span>
 				</p>
-				<p class="text-sm text-slate-600">
-					Confianza: <span class="font-semibold">{(currentScore * 100).toFixed(0)}%</span>
+				<p class="text-sm text-slate-600 mt-0.5">
+					Confianza: <span class="font-bold">{(currentScore * 100).toFixed(0)}%</span>
 				</p>
-				<p class="text-xs text-slate-500 mt-1">Eventos: {eventCount}</p>
+				<p class="text-xs text-slate-500 mt-1.5">Eventos: {eventCount}</p>
 				<button
-					class="mt-3 w-full bg-rose-50 text-rose-700 text-sm font-medium px-3 py-2 rounded hover:bg-rose-100 transition"
+					class="mt-4 w-full bg-rose-100 text-rose-700 text-sm font-semibold px-3 py-2 rounded-lg hover:bg-rose-200 transition flex items-center justify-center gap-1.5"
 					onclick={stopAnalysis}
 				>
+					<X class="w-4 h-4" />
 					Detener análisis
 				</button>
 			</div>
 		{:else}
 			<button
-				class="bg-white border border-slate-300 text-slate-700 text-sm font-medium px-4 py-2 rounded shadow-sm hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+				class="bg-white border border-slate-200/80 text-slate-700 text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center gap-2"
 				onclick={() => (showConsent = true)}
 				disabled={!licenseKey}
 			>
-				{licenseKey ? 'Analizar experiencia' : 'MorphCast no configurado'}
+				<Camera class="w-4 h-4 text-indigo-600" />
+				<span>{licenseKey ? 'Analizar experiencia' : 'MorphCast no configurado'}</span>
 			</button>
 		{/if}
 		{#if errorText}
-			<p class="text-xs text-rose-600 bg-white border border-rose-200 rounded px-2 py-1 shadow-sm">{errorText}</p>
+			<div class="text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-3 py-2 shadow-sm flex items-center gap-1.5">
+				<AlertCircle class="w-3.5 h-3.5 flex-shrink-0" />
+				{errorText}
+			</div>
 		{/if}
 	</div>
 {/if}
