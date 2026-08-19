@@ -181,7 +181,7 @@
 </script>
 
 {#if browser}
-	<div class="fixed bottom-4 left-4 z-40 flex flex-col gap-2">
+	<div class="fixed bottom-4 left-4 z-20 md:left-72 flex flex-col gap-2">
 		{#if showConsent}
 			<div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4 w-72">
 				<p class="text-sm text-gray-700 mb-3">
