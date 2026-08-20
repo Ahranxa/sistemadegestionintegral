@@ -237,7 +237,7 @@
 						<h3 class="text-sm font-semibold">Análisis de experiencia</h3>
 					</div>
 					<p class="text-sm text-slate-600 mb-4">
-						Se utilizará la cámara para analizar expresiones mediante MorphCast. No guardamos video ni imágenes.
+						Se utilizará la cámara para analizar expresiones mediante MorphCast. No guardamos video ni imágenes: solo se registran datos agregados de las emociones detectadas. Esta información nos ayuda a mejorar el diseño de la aplicación y a que los usuarios naveguen de forma más natural e intuitiva.
 					</p>
 					<div class="flex gap-2">
 						<button
