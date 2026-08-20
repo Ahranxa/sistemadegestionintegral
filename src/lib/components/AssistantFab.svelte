@@ -70,9 +70,9 @@
 	aria-label="Asistente"
 >
 	{#if open}
-		<X class="w-5 h-5 md:w-6 md:h-6" />
+		<X class="w-5 h-5 md:w-6 md:h-6 pointer-events-none" />
 	{:else}
-		<Bot class="w-5 h-5 md:w-6 md:h-6" />
+		<Bot class="w-5 h-5 md:w-6 md:h-6 pointer-events-none" />
 	{/if}
 </button>
 
@@ -135,7 +135,7 @@
 					disabled={loading || !message.trim()}
 					class="rounded-xl bg-indigo-600 px-3.5 py-2.5 text-white hover:bg-indigo-700 disabled:opacity-50 shadow-sm hover:shadow transition"
 				>
-					<Send class="w-4 h-4" />
+					<Send class="w-4 h-4 pointer-events-none" />
 				</button>
 			</div>
 		</div>

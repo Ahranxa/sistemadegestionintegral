@@ -101,7 +101,7 @@
 							class="md:hidden text-slate-400 hover:text-white p-1 rounded hover:bg-white/10 transition"
 							aria-label="Cerrar menú"
 						>
-							<X class="w-6 h-6" />
+							<X class="w-6 h-6 pointer-events-none" />
 						</button>
 					</div>
 
@@ -118,7 +118,7 @@
 									: 'border-l-[3px] border-transparent text-slate-400 hover:bg-white/[0.06] hover:text-white hover:translate-x-0.5'}"
 							>
 								{#if Icon}
-									<Icon class="w-[18px] h-[18px] {isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'} transition" />
+									<Icon class="w-[18px] h-[18px] pointer-events-none {isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'} transition" />
 								{/if}
 								{link.label}
 							</a>
@@ -141,7 +141,7 @@
 								class="md:hidden text-slate-500 hover:text-slate-900 p-1.5 -ml-1.5 rounded hover:bg-slate-100 transition"
 								aria-label="Abrir menú"
 							>
-								<Menu class="w-5 h-5" />
+								<Menu class="w-5 h-5 pointer-events-none" />
 							</button>
 							<div class="min-w-0">
 								<p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Módulo</p>
