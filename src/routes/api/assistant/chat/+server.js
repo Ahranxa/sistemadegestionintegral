@@ -50,7 +50,11 @@ export async function POST({ request, locals }) {
 			response.content.find((c) => c.type === 'text')?.text ??
 			'No se recibió respuesta';
 
-		return json({ reply: text });
+		const reply = text
+			.replace(/^#+\s*/gm, '')
+			.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+		return json({ reply });
 	} catch (err) {
 		console.error('[assistant/chat] Error de Anthropic:', err);
 		return json({ error: 'No se pudo obtener respuesta del asistente' }, { status: 502 });
