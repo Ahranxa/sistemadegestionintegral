@@ -98,8 +98,12 @@
 			{:else}
 				{#each messages as msg, i (i)}
 					<div class="flex {msg.role === 'user' ? 'justify-end' : 'justify-start'}">
-						<div class="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm {msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm shadow-sm'}">
-							{msg.text}
+						<div class="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm {msg.role === 'user' ? 'bg-indigo-600 text-white rounded-br-sm' : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm shadow-sm'} leading-relaxed">
+							{#if msg.role === 'user'}
+								{msg.text}
+							{:else}
+								{@html msg.text}
+							{/if}
 						</div>
 					</div>
 				{/each}
